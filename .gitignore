@@ -1,9 +1,0 @@
-*.o
-*.bin
-*.gba
-*.sav
-*.sgm
-*.py
-build/
-offsets.ini
-scripts/

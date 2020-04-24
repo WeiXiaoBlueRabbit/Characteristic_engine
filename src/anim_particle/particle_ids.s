@@ -35,3 +35,4 @@
 .equ Z_ASH_GRENINJA_particle_ID, 0x4A
 .equ Z_PIKA_BALLOON_particle_ID, 0x4B
 .equ Z_AURA__particle_ID, 0x4C
+.equ DRAGON_ASCENT__particle_ID, 0x4D

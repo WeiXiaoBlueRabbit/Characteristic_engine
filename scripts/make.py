@@ -65,7 +65,7 @@ def edit_linker(offset):
 	file_change_line("linker.ld", 4, "\t\trom     : ORIGIN = (0x08000000 + " + hex(offset) + "), LENGTH = 32M\n")
 	
 def edit_insert(offset):
-	file_change_line("./scripts/insert.py", 8, "OFFSET_TO_PUT = " + hex(offset) + '\n')
+	file_change_line("./scripts/insert.py", 11, "OFFSET_TO_PUT = " + hex(offset) + '\n')
 		
 def build_code():
 	os.system("python scripts/build.py")
@@ -88,9 +88,9 @@ with open(ROM_NAME, 'rb+') as rom:
 		offset = find_offset_to_put(rom, 0x50000, align_x100(offset))
 	edit_linker(offset)
 	edit_insert(offset)
-
-build_code()
-insert_code()
+	build_code()
+	insert_code()
+	rom.close()
 	
 with open("test.gba", 'rb+') as new_rom:
 	if CLEAR_OLD_MOVETABLE == True or CLEAR_ALL_OLDTABLES == True:

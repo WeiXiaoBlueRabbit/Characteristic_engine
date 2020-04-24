@@ -469,6 +469,10 @@ shiny_particle_image:
 .byte 0x00, 0x08, 0x6A, 0x28
 .align 2
 
+.word DRAGON_ASCENT_particle
+.byte 0x00, 0x08, 0x6B, 0x28
+.align 2
+
 @Battle Animations Particles Table
 @Format for each entry is:
 @Pointer to Image Pallet, Item Index (hword), Padding (hword)
@@ -872,3 +876,5 @@ particle_entry OMEGA_REVERSION_SYMBOL_palette OMEGAEVO_SYMBOL_particle 0x0
 .byte 0x69, 0x28, 0x00, 0x00
 .word Z_AURA_palette
 .byte 0x6A, 0x28, 0x00, 0x00
+.word DRAGON_ASCENT_palette
+.byte 0x6B, 0x28, 0x00, 0x00

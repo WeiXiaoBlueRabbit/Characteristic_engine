@@ -1675,12 +1675,19 @@ BS_BINDEFFECT:
 CANT_CONFUSE_DUETOABILITY_PRINT_END2:
 	call CANT_CONFUSE_DUETOABILITY_PRINT
 	end2
-	
+
 .global BS_BEAKBLAST
 BS_BEAKBLAST:
 	waitstate
 	seteffectsecondary
-	return_cmd	
+	return_cmd
+
+.global BS_CANTUSE_SHELLTRAP
+BS_CANTUSE_SHELLTRAP:
+	attackstring
+	pause_cmd 0x20
+	printstring 0x238
+	goto_cmd BS_PPREDUCE_FAIL_WAITMSG_ENDTURN
 	
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @ Cant select a move from menu

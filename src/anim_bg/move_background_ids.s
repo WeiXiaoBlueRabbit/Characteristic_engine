@@ -20,3 +20,5 @@
 .equ Z_ASH_PIKACHU_background_user, 0x2C
 .equ Z_ASH_PIKACHU_background_foe, 0x2D
 .equ Z_ASH_PIKACHU_background_foe_2, 0x2E
+.equ DRAGON_ASCENT_ANIM_background_user, 0x2F
+.equ DRAGON_ASCENT_ANIM_background_foe, 0x30

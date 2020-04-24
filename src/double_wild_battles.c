@@ -10,35 +10,45 @@ u8 get_bank_side(u8 bank);
 void setflag(u16 flag);
 bool time_check(u8 from, u8 to);
 bool is_of_type(u8 bank, u8 type);
-u8 get_trainer_opponent_A_class();
-bool is_poke_caught(u16 species);
 
-#if DOUBLE_BATTLE_PERCENT > 0
+/*#pragma pack(push,1)
+struct double_grass_tile{
+    u16 tile_id;
+    u8 percent;
+};
+#pragma pack(pop)
+
+struct double_grass_tile double_grass_tiles[DOUBLE_WILD_TILES] = {
+    {0xD, 70}
+};*/
+
+#define DOUBLE_BATTLE_PERCENT 30
+
 bool doubles_tile_check(void)
 {
-    return cur_map_get_blockid_at(sav1->x_coords + 7, sav1->y_coords + 7) == 0xD
-    && percent_chance(DOUBLE_BATTLE_PERCENT);
-}
-#endif
-
-bool consider_creating_wild_poke_delegate(void* poke_data){
-    u16 spieces;
-    return consider_creating_wild_poke(poke_data, 0, 3) &&
-    !(basestat_table[(spieces = get_attributes(party_opponent,ATTR_SPECIES,0))]->sp && is_poke_caught(spieces));
+    return cur_map_get_blockid_at(sav1->x_coords + 7, sav1->y_coords + 7) == 0xD && percent_chance(DOUBLE_BATTLE_PERCENT);
+    /*for (u32 i = 0; i < DOUBLE_WILD_TILES; i++)
+    {
+        if (double_grass_tiles[i].tile_id == tile)
+        {
+            if (percent_chance(double_grass_tiles[i].percent))
+                return 1;
+            return 0;
+        }
+    }
+    return 0;*/
 }
 
 bool wild_grass_battle(void* wild_data)
 {
-    bool battle = consider_creating_wild_poke_delegate(wild_data);
-#if DOUBLE_BATTLE_PERCENT > 0
+    bool battle = consider_creating_wild_poke(wild_data, 0, 3);
     if (battle && doubles_tile_check() && !not_enough_for_doubles()) //consider double wild battles
     {
         struct pokemon poke = party_opponent[0];
-        while (!consider_creating_wild_poke_delegate(wild_data));
+        while (!consider_creating_wild_poke(wild_data, 0, 3));
         party_opponent[1] = poke;
         battle_flags.double_battle = 1;
     }
-#endif
     return battle;
 }
 
@@ -103,6 +113,9 @@ u32 calc_ball_formula(enum ball_index ball_no, struct battle_participant* catchi
 {
     u8 multiplier = 10;
     u8 catchrate = (*basestat_table)[catching->species].catch_rate;
+    if (is_poke_ultrabeast(catching->species) && ball_no != BALL_MASTER && ball_no != BALL_BEAST)
+        multiplier = 1;
+	else {
     switch (ball_no)
     {
     //case BALL_PREMIER: case BALL_LUXURY: case BALL_POKE: case BALL_MASTER:
@@ -226,6 +239,7 @@ u32 calc_ball_formula(enum ball_index ball_no, struct battle_participant* catchi
         break;
     #endif // EXPANDED_POKEBALLS
     }
+	}
     u16 hp_max = catching->max_hp * 3;
     u32 formula = (catchrate * multiplier / 10) * (hp_max - catching->current_hp * 2) / hp_max;
     if (catching->status.flags.sleep || catching->status.flags.freeze)

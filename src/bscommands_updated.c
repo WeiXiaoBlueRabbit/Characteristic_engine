@@ -253,7 +253,7 @@ void atk96_weather_damage(void)
 		}
 		else if (HAIL_WEATHER)
 		{
-		if (!(is_of_type(bank_attacker, TYPE_ICE)) && !(ability_effect && (ability == ABILITY_ICE_BODY || ability == ABILITY_SNOW_CLOAK)))
+			if (!(is_of_type(bank_attacker, TYPE_ICE)) && !(ability_effect && (ability == ABILITY_ICE_BODY || ability == ABILITY_SNOW_CLOAK)))
 			{
 				if (!(status3[bank_attacker].underground || status3[bank_attacker].underwater))
 				{
@@ -1741,7 +1741,7 @@ u8 check_if_cannot_attack(void)
 						current_move == MOVE_SHELL_TRAP)
 				{
 					effect = 3; //effect = 1或2都不可以，暂时不知道为什么
-					battlescripts_curr_instruction = BS_HARSHSUN_PREVENTS; //Needs Revision
+					battlescripts_curr_instruction = BS_HARSHSUN_PREVENTS;//Needs Revision 离泮定义未见字段BS_CANTUSE_SHELLTRAP
 				}
 				break;
 			case 21: //Psychic Terrain, JeremyZ
@@ -2018,7 +2018,7 @@ void atk00_move_canceller(void)
 					objects[new_battlestruct->mega_related.trigger_id].private[ANIM_STATE]=DISABLE;
 				}
 			*/
-			if (!battle_flags.multibattle)
+			if (!/*battle_flags.multibattle*/is_in_tag_battle())
 			{
 				new_battlestruct->mega_related.z_happened_pbs |= 0x5;
 			}
@@ -2030,7 +2030,7 @@ void atk00_move_canceller(void)
 		}
 		else if (bank_attacker == 2)
 		{
-			if (!battle_flags.multibattle)
+			if (!/*battle_flags.multibattle*/is_in_tag_battle())
 			{
 				new_battlestruct->mega_related.z_happened_pbs |= 0x5;
 			}
@@ -3660,7 +3660,6 @@ void atk23_exp_evs_lvlup(void)
 			u8 via_expshare = 0;
 			u8 via_sentin = 0;
 			u8 sent_in = sent_pokes_to_opponent[bank >> 1];
-			expshare_exp = 0;
 			for (u8 i = 0; i < 6; i++)
 			{
 				struct pokemon* poke = &party_player[i];
@@ -3676,17 +3675,20 @@ void atk23_exp_evs_lvlup(void)
 			}
 			struct battle_participant* oppponent = &battle_participants[bank];
 			u16 exp = (*basestat_table)[oppponent->species].exp_yield * oppponent->level / 7;
+			//exp *= 10;
 			if (EXP_DIVIDE == true && via_expshare)
 			{
-			    exp /= (2 + battle_flags.double_battle);
+			    exp /= 2;
 			}
-#if (EXP_DIVIDE == true)
+			if (EXP_DIVIDE == true)
 				*sentin_exp = ATLEAST_ONE(exp / via_sentin);
-				expshare_exp = ATLEAST_ONE(exp / via_expshare);
+			else
+				*sentin_exp = ATLEAST_ONE(exp);
+#if (EXP_DIVIDE == true)
+			expshare_exp = ATLEAST_ONE(exp / via_expshare);
 #else
-				expshare_exp =*sentin_exp = ATLEAST_ONE(exp);
+			expshare_exp = ATLEAST_ONE(exp);
 #endif
-
 			*exp_getter_id = 0;
 			battle_stuff_ptr->sentin_pokes = sent_in;
 			(*tracker)++;
@@ -3741,7 +3743,7 @@ void atk23_exp_evs_lvlup(void)
 					battle_stuff_ptr->expgetter_bank = 0;
 					if (battle_flags.double_battle && is_bank_present(2) && battle_team_id_by_side[2] == *exp_getter_id)
 						battle_stuff_ptr->expgetter_bank = 2;
-					if(*exp_getter_id == 0 || !expshare_exp){
+					if(*exp_getter_id == 0){
 						//buffer poke name
 						battle_text_buff1[0] = 0xFD;
 						battle_text_buff1[1] = 4;
@@ -3852,7 +3854,7 @@ void atk23_exp_evs_lvlup(void)
 				if (*exp_getter_id == 5)
 					*tracker = 6; //finish exp giving
 				else {
-					if(*exp_getter_id == 0 && !GET_CUSTOMFLAG(DISABLED_EXP_FLAG) && expshare_exp){
+					if(*exp_getter_id == 0 && !GET_CUSTOMFLAG(DISABLED_EXP_FLAG)){
 						prep_string(0x26b, battle_stuff_ptr->expgetter_bank);
 					}
 					*tracker = 2; //looper increment

@@ -392,7 +392,7 @@ u8 get_bank_side(u8 bank);
 		0xAB, 0xFF};
 /*0x23E*/const u8 targetnoconfusion_text[] = {0xFD, 0x10, 0x09, 0x53, 0x0F, 0x7E, 0x01, 0xA1, 0x03, 0x0A, 0x05, 0x79,
 		0x09, 0x0C, 0xAB, 0xFF};
-/*0x23F*/const u8 burnuptext[] = {0xFD, 0x0F, 0x01, 0x78, 0x0B, 0xB3, 0x0C, 0x63, 0x08, 0x9E, 0xAB, 0xFF};
+/*0x23F*/const u8 burnuptext[] = {0xFD, 0x0F, 0x0B, 0x3C, 0x0B, 0xB3, 0x02, 0xD9, 0x07, 0x51, 0x08, 0x9E, 0xAB, 0xFF};
 /*0x240*/const u8 attackeracquired[] = {0xFD, 0x0F, 0x05, 0x7E, 0x03, 0x0A, 0xFD, 0x19, 0xAB, 0xFF};
 /*0x241*/const u8 scractiveHPrestored[] = {0xFD, 0x13, 0x03, 0x0B, 0xC2, 0xCA, 0x05, 0x65, 0x04, 0x1E, 0x08, 0x9E, 0xAB,
 		0xFF};
@@ -499,7 +499,7 @@ const u8 text_GO_xfd5[] = {0xFC, 2, 0xf, 0x07, 0x7D, 0x07, 0xA6, 0x03, 0x4D, 0x0
 		0x00, 0xFD, 0x05, 0xAB, 0xFF};
 const u8 text_go_fdx0[] = {0x07, 0x7D, 0x07, 0xA6, 0x03, 0x4D, 0x0C, 0x0C, 0x09, 0xD9, 0x08, 0x9E, 0xAB, 0x00, 0xfd,
 		0x00, 0xab, 0xFF};
-const u8* new_strings_table[] = {firespintrap_text, magmastormtrap_text, extreme_sun_activation_text,
+const u8* const new_strings_table[] = {firespintrap_text, magmastormtrap_text, extreme_sun_activation_text,
 		heavyrain_activation_text, mysticalaircurrent_activation_text, forewarn_text, slowstart_text, anticipation_text,
 		infestationtrap_text, airlock_text, harvest_text, healer_text, empty_text5, moldbreaker_text, turboblaze_text,
 		terravolt_text, empty_text9, use_zmove_text, empty_text12, absorbabilityimmune_text, userteam_text,
@@ -639,7 +639,7 @@ const u8* get_partner_name(void)
 	if (battle_flags.player_ingame_partner)
 	{
 		if (partner_trainer & PARTNER_CUSTOM)
-			string_ptr = trainer_table[BIC(partner_trainer, PARTNER_ANIMATES | PARTNER_CUSTOM)].name;
+			string_ptr = (*trainer_table)[BIC(partner_trainer, PARTNER_ANIMATES | PARTNER_CUSTOM)].name;
 		else
 		{
 			get_frontier_trainer_name(script_text_buffer1, partner_trainer);
@@ -725,7 +725,7 @@ static void b_fdecode_case(const u8* const src, u8* dst)
 				dst = get_chosen_poke_nick(read_byte(&src[srcID]), read_byte(&src[srcID + 1]), dst);
 				srcID += 2;
 				break;
-			case 8:
+			case 8: //todo
 				String = negative_flavour_table[read_byte(&src[srcID])];
 				srcID++;
 				break;
@@ -1056,7 +1056,7 @@ u32 b_strcpy_decode(const u8* const src, u8* const dst)
 					else if (battle_flags.flag_x4000000)
 						class_id = get_x4000000_trainerclass(trainer_opponent_B);
 					else
-						class_id = trainer_table[trainer_opponent_B].class;
+						class_id = (*trainer_table)[trainer_opponent_B].class;
 					string = get_trainerclass_ptr(class_id);
 				}
 					break;
@@ -1072,7 +1072,7 @@ u32 b_strcpy_decode(const u8* const src, u8* const dst)
 						string = text;
 					}
 					else
-						string = trainer_table[trainer_opponent_B].name;
+						string = (*trainer_table)[trainer_opponent_B].name;
 					break;
 				case 48: //trainer B lose text
 					if (BATTLE_FRONTIER_BATTLE)
@@ -1098,7 +1098,7 @@ u32 b_strcpy_decode(const u8* const src, u8* const dst)
 				case 50: //partner trainer class
 					if (partner_trainer & PARTNER_CUSTOM)
 						string = get_trainerclass_ptr(
-								trainer_table[BIC(partner_trainer, PARTNER_ANIMATES | PARTNER_CUSTOM)].class);
+								(*trainer_table)[BIC(partner_trainer, PARTNER_ANIMATES | PARTNER_CUSTOM)].class);
 					else
 						string = get_trainerclass_ptr(get_frontier_opponent_class(partner_trainer));
 					break;

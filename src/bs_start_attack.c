@@ -317,7 +317,7 @@ u8 check_mega_evo(u8 bank) {
             bank_mega_mode = new_battlestruct->mega_related.user_trigger;
             if (bank_mega_mode == 3) //bank_mega_mode > 1
             {
-                if (!battle_flags.multibattle) {
+                if (!/*battle_flags.multibattle*/is_in_tag_battle()) {
                     new_battlestruct->mega_related.evo_happened_pbs |= 0x5;
                 } else {
                     new_battlestruct->mega_related.evo_happened_pbs |= 0x1;
@@ -328,7 +328,7 @@ u8 check_mega_evo(u8 bank) {
             bank_mega_mode = new_battlestruct->mega_related.ally_trigger;
             if (bank_mega_mode == 3) //bank_mega_mode > 1
             {
-                if (!battle_flags.multibattle) {
+                if (!/*battle_flags.multibattle*/is_in_tag_battle()) {
                     new_battlestruct->mega_related.evo_happened_pbs |= 0x5;
                 } else {
                     new_battlestruct->mega_related.evo_happened_pbs |= 0x4;
@@ -368,7 +368,7 @@ u8 check_mega_evo(u8 bank) {
         }
         else if (bank_mega_mode == 2) //bank_mega_mode == 1
         {
-            new_battlestruct->mega_related.light_up_species[banks_side] = attacker_struct->species;
+            ((u16*) sav1->balls_pocket)[banks_side] = attacker_struct->species;
             bs_execute(BS_LIGHT_UP);
         } else {
             //buffer for mega ring
@@ -408,12 +408,14 @@ bool check_focus(u8 bank) {
 }
 
 //Is Z Move
-#define is_z_move(move) (move >= MOVE_Z_NORMAL_PHYS && move <= MOVE_Z_ASH_GRENINJA)
+inline bool is_z_move(u16 move) {
+    return move >= MOVE_Z_NORMAL_PHYS && move <= MOVE_Z_ASH_GRENINJA;
+}
 
 u16 check_z_move(u32 move, u32 bank) {
+    const struct move_info* info = &move_table[move];
     if (get_item_effect(bank, 0) != ITEM_EFFECT_ZCRYSTAL)
         return 0;
-    const struct move_info* info = &move_table[move];
     u8 type = info->type;
     u16 z_move = 0;
     //决定Z招式文本
@@ -423,10 +425,10 @@ u16 check_z_move(u32 move, u32 bank) {
     else if (z_type > TYPE_EGG)
         z_type--;
     new_battlestruct->various.var2 = 0x24D + z_type; //default: 0x18D
-    u32 param;
+    u32 param = get_battle_item_extra_param(bank);
     if (is_z_move(move))
         z_move = move;
-    else if ((param = get_battle_item_extra_param(bank)) > TYPE_FAIRY) {
+    else if (param > TYPE_FAIRY) {
         const struct evolution_sub* evo = GET_EVO_TABLE(battle_participants[bank].species);
         for (u8 i = 0; i < NUM_OF_EVOS; i++) {
             if (!evo[i].method && evo[i].paramter == battle_participants[bank].held_item &&
@@ -441,7 +443,7 @@ u16 check_z_move(u32 move, u32 bank) {
         if (info->split == 2)
             z_move = move;
         else
-            z_move = MOVE_Z_NORMAL_PHYS + z_type * 2 + info->split;
+            z_move = MOVE_Z_NORMAL_PHYS + (z_type << 1) + info->split;
     }
     return z_move;
 }

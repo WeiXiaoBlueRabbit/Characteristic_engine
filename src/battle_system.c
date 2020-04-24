@@ -445,7 +445,7 @@ static bool check_leafguard_shieldsdown(u8 ability, u8 bank)
 bool is_class_FOUR(u8 bank)
 {
 	enum trainer_class class = get_trainer_opponent_A_class();
-	if(get_bank_side(bank) == 1 && /*(class==CLASS_ELITE_FOUR ||*/ class == CLASS_CHAMPION/*)*/) //Only Champion enjoys status and hazards immunity, JeremyZ
+	if(get_bank_side(bank) == 1 && /*(class==CLASS_ELITE_FOUR ||*/ class == CLASS_PKMN_TRAINER1/*)*/) //Only PKMN_TRAINER1 enjoys status and hazards immunity, JeremyZ
 		return 1;
 	return 0;
 }
@@ -802,9 +802,9 @@ bool battle_turn_move_effects(void)
                     if (attacker_struct->status.flags.burn && current_hp && not_magicguard(active_bank))
                     {
                         effect = 1;
-                        damage_loc = get_1_16_of_max_hp(active_bank);
-						if (check_ability(active_bank, ABILITY_HEATPROOF))
-							damage_loc /= 2;
+                        damage_loc = get_1_16_of_max_hp(active_bank); //JeremyZ
+                        if (check_ability(active_bank, ABILITY_HEATPROOF))
+                            damage_loc /= 2;
                         call_bc_move_exec((void*)0x082DB25F);
                     }
                     break;
@@ -2093,22 +2093,22 @@ s8 can_switch(u8 bank) //1 - can; 0 - can't; -1 can't due to abilities
         return 0;
     if (get_item_effect(bank, 1) == ITEM_EFFECT_SHEDSHELL)
         return 1;
-    if (battle_participants[bank].status2.trapped_in_wrap || battle_participants[bank].status2.cant_escape || status3[bank].rooted || new_battlestruct->field_affecting.fairy_lock)
+    if ((battle_participants[bank].status2.trapped_in_wrap || battle_participants[bank].status2.cant_escape || status3[bank].rooted || new_battlestruct->field_affecting.fairy_lock) && !is_of_type(bank, TYPE_GHOST))
         return 0;
     u8 ability_bank = ability_battle_effects(12, bank, ABILITY_SHADOW_TAG, 0, 0);
-    if (ability_bank && !check_ability(bank, ABILITY_SHADOW_TAG) && !is_of_type(bank, TYPE_GHOST)) //JeremyZ
+    if (ability_bank && !check_ability(bank, ABILITY_SHADOW_TAG) && !is_of_type(bank, TYPE_GHOST))
     {
         another_active_bank = ability_bank - 1;
         return -1;
     }
-    ability_bank = ability_battle_effects(12, bank, ABILITY_MAGNET_PULL, 1, 0);
-    if (ability_bank && is_of_type(bank, TYPE_STEEL) && !is_of_type(bank, TYPE_GHOST)) //JeremyZ
+    ability_bank = ability_battle_effects(12, bank, ABILITY_MAGNET_PULL, 0, 0);
+    if (ability_bank && is_of_type(bank, TYPE_STEEL) && !is_of_type(bank, TYPE_GHOST))
     {
         another_active_bank = ability_bank - 1;
         return -1;
     }
-    ability_bank = ability_battle_effects(12, bank, ABILITY_ARENA_TRAP, 1, 0);
-    if (ability_bank && GROUNDED(bank) && !is_of_type(bank, TYPE_GHOST)) //JeremyZ
+    ability_bank = ability_battle_effects(12, bank, ABILITY_ARENA_TRAP, 0, 0);
+    if (ability_bank && GROUNDED(bank) && !is_of_type(bank, TYPE_GHOST))
     {
         another_active_bank = ability_bank - 1;
         return -1;
@@ -2209,7 +2209,8 @@ bool ai_switch_wonderguard()
             {
                 for (u8 j = 0; j < 4; j++)
                 {
-                    u16 move = get_attributes(&poke[i], ATTR_ATTACK_1 + j, 0);
+                    //u16 move = get_attributes(&poke[i], ATTR_ATTACK_1 + j, 0);
+					u16 move = poke[i].moves[j];
                     if (move && wonderguard_good_move(wonder_bank, self, move, 0))
                     {
                         battle_stuff_ptr->switchout_index[self] = j;

@@ -1,2 +1,0 @@
-# Characteristic_engine
-尝试用究极绿的项目添加新的特性表

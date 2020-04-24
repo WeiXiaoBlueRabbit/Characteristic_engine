@@ -52,25 +52,25 @@ u32 random_value(u32 limit);
 u8 z_protect_affects(u16 move); //JeremyZ
 void check_weather_trio(void);
 
-bool no_inline is_poke_valid(struct pokemon* poke)
+bool is_poke_valid(struct pokemon* poke)
 {
     u16 species = get_attributes(poke, ATTR_SPECIES, 0);
     return (species != 0 && species != 412 && !get_attributes(poke, ATTR_IS_EGG, 0)); //JeremyZ
 }
 
-struct pokemon* no_inline get_party_ptr(u8 bank)
+struct pokemon* get_party_ptr(u8 bank)
 {
     if (get_bank_side(bank))
         return &party_opponent[0];
     return &party_player[0];
 }
 
-struct pokemon* no_inline get_bank_poke_ptr(u8 bank)
+struct pokemon* get_bank_poke_ptr(u8 bank)
 {
     return &get_party_ptr(bank)[battle_team_id_by_side[bank]];
 }
 
-u8 no_inline get_poke_ability_active_bank(){
+u8 get_poke_ability_active_bank(){
 	return get_poke_ability(get_bank_poke_ptr(active_bank));
 }
 
@@ -86,13 +86,13 @@ u8 count_party_pokemon(u8 bank)
     return usable_pokes;
 }
 
-void no_inline ability_switchin_effect(void)
+void ability_switchin_effect(void)
 {
     status3[new_battlestruct->various.active_bank].innerswitchinlock = 1;
     ability_battle_effects(24, new_battlestruct->various.active_bank, 0, 0, 0);
 }
 
-void no_inline change_attacker_item(void)
+void change_attacker_item(void)
 {
     active_bank = bank_attacker;
     bb2_setattributes_in_battle(0, 2, 0, 4, &battle_participants[bank_attacker].held_item);
@@ -472,7 +472,7 @@ void shadow_thief()
 			*atk_stat+=by_how_much;
 			if(*atk_stat>0xC)
 				*atk_stat=0xC;
-			//妤?娴ｅ秵妲搁崣妯哄閻ㄥ嫭鏆熼崐?閸氼偆顑侀崣?,娴ｅ骸娲撴担宥嗘Ц閸欐ê瀵查惃鍕潣閹?
+			//�?浣嶆槸鍙樺寲鐨勬暟鍊?鍚鍙?,浣庡洓浣嶆槸鍙樺寲鐨勫睘�?
 			if(by_how_much>3)
 				by_how_much=3;
 			//battle_scripting.stat_changer = (by_how_much<<4) | bit_to_stat(BIT_GET(i));
@@ -1557,6 +1557,14 @@ void defog_effect(void)
         ptr_to_script = &defogblows_bs;
         move_to_buff1(MOVE_LIGHT_SCREEN);
     }
+    else if (new_battlestruct->side_affecting[targets_side].aurora_veil)
+    {
+        effect = 1;
+        new_battlestruct->side_affecting[targets_side].aurora_veil = 0;
+        bank_attacker = bank_target;
+        ptr_to_script = &defogblows_bs;
+        move_to_buff1(MOVE_AURORA_VEIL);
+    }
     else if (target_side->mist_on)
     {
         effect = 1;
@@ -1803,6 +1811,7 @@ void twoturn_moves(void)
         *stringchooser = 2;
         break;
     case MOVE_SOLAR_BEAM:
+	case MOVE_SOLAR_BLADE:
         *stringchooser = 3;
         break;
     case MOVE_BOUNCE:
@@ -2894,7 +2903,7 @@ void check_soulheart(void)
             return;
         }
         static const u8 cant_receive_abilities[] = {ABILITY_FLOWER_GIFT, ABILITY_FORECAST, ABILITY_ILLUSION, ABILITY_IMPOSTER, ABILITY_MULTITYPE, ABILITY_STANCE_CHANGE, ABILITY_TRACE, ABILITY_WONDER_GUARD, ABILITY_ZEN_MODE};
-        if ((check_ability(i, ABILITY_POWER_OF_ALCHEMY) || check_ability(i, ABILITY_RECEIVER)) && !battle_participants[i ^ 2].current_hp
+        if (battle_flags.double_battle && (check_ability(i, ABILITY_POWER_OF_ALCHEMY) || check_ability(i, ABILITY_RECEIVER)) && !battle_participants[i ^ 2].current_hp
                  && !findability_in_table(battle_participants[i ^ 2].ability_id ,cant_receive_abilities) && is_bank_present(i) && !(*done & BIT_GET(i)))
         {
 

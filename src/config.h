@@ -12,13 +12,14 @@
 #define ITEM_SWAP           false   //if true player's item will be that that was switched, if false the switched item that a pokemon originally had returns to it
 #define MAX_LEVEL           100     //highest possible level
 #define MAX_EVS             510     //maximum amount of EV points per pokemon
-#define EXP_DIVIDE          true    //if true exp will be divided among pokemon(if two pokemon participate they'll get 50 % each), set to false if you want gen6-style exp
+#define EXP_DIVIDE          false    //if true exp will be divided among pokemon(if two pokemon participate they'll get 50 % each), set to false if you want gen6-style exp
 #define GENVI_EXPSHARE      true    //set to true if you want EXPSHARE to act like in gen6
 #define EXPSHARE_FLAG       0x275   //flag that must be set for GENVI expshare to work
 #define DISABLED_EXP_FLAG   0x276   //if that flag is set, receiving exp is disabled, if flag is 0 it has no effect
 #define DISABLED_EVS_FLAG   0x277     //if that flag is set, receiving EVS points is disabled, if flag is 0 it has no effect; this and above flag can be the same
-#define DOUBLE_BATTLE_PERCENT 0    //set to false if you don't want have them in your hack at all
+#define DOUBLE_WILD_BATTLES true    //set to false if you don't want have them in your hack at all
 //#define DOUBLE_WILD_BATTLES_FLAG 0x27B //0x278是有问题的
+#define DOUBLE_WILD_TILES   4      //amount of tiles double wild battles are possible on
 #define EXPANDED_POKEBALLS  true  //set to true if your hack uses pokeball expansion
 #define INVERSE_FLAG        0x271   //if that flag is set, the battle is inverse
 #define FISHING_FLAG        0x270   //if that flag is set, it's a battle against a hooked up pokemon
@@ -56,6 +57,6 @@
 #define EM 0
 #define UTRAL 1
 
-#define EM_VERSION EM
+#define EM_VERSION UTRAL
 
 #endif /* CONFIG_H */

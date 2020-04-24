@@ -1,5 +1,5 @@
-#include "defines.h"
-#include "static_references.h"
+#include "../defines.h"
+#include "../static_references.h"
 
 u16 GetAbilityBySpecies(u16 species, u8 slot);
 static const u16 gPokeAbilities[][3];

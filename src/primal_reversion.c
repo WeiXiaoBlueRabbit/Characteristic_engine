@@ -8,6 +8,7 @@ u16 get_mega_species(u8 bank, u8 chosen_method);
 u8 get_bank_side(u8 bank);
 void bs_execute(void* bs);
 struct pokemon* get_bank_poke_ptr(u8 bank);
+extern u16 GetAbilityBySpecies_call(u16 species, u8 slot);
 
 u8 get_reversion_type(u8 bank, u16 target_species)
 {
@@ -25,7 +26,7 @@ u8 get_reversion_type(u8 bank, u16 target_species)
 	return reversion_type;
 }
 
-void set_mega_attr(struct battle_participant* bank_struct, struct pokemon* poke_address, u16 new_species)
+void set_mega_attr(struct battle_participant* bank_struct, u8 bank, struct pokemon* poke_address, u16 new_species)
 {
 	set_attributes(poke_address, ATTR_SPECIES, &new_species);
 	calculate_stats_pokekmon(poke_address);
@@ -38,7 +39,8 @@ void set_mega_attr(struct battle_participant* bank_struct, struct pokemon* poke_
     bank_struct->type1 = PokeStats->type1;
 	bank_struct->type2 = PokeStats->type2;
 
-	bank_struct->ability_id = PokeStats->ability1;
+	//bank_struct->ability_id = PokeStats->ability1;
+	gBankAbilities[bank] = GetAbilityBySpecies_call(new_species, 1);
 }
 
 bool handle_primal_reversion(u8 bank)
@@ -76,7 +78,8 @@ bool handle_primal_reversion(u8 bank)
 				new_battlestruct->mega_related.party_mega_check |= bits_table[battle_team_id_by_side[bank]];
 			}
 			objects[objid].private[PRIMAL_CHECK_COMPLETE] = true;
-			set_mega_attr(bank_struct, poke_address, primal_species);
+			//set_mega_attr(bank_struct, poke_address, primal_species);
+			set_mega_attr(bank_struct, bank, poke_address, primal_species);
 			bank_struct->species = primal_species;
 			new_battlestruct->various.active_bank = bank;
 			bank_attacker = bank;

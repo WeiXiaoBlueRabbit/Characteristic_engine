@@ -54,13 +54,23 @@ trainer_battle_music_return:
 	
 get_active_poke_ability:
 	bl get_poke_ability_active_bank
+	bl SaveBankAbility
 	ldr r1, = (0x804c99e|1)
 	bx r1
 	
 get_active_poke_ability2:
 	bl get_poke_ability_active_bank
+	bl SaveBankAbility
 	ldr r1, = (0x803ad6c|1)
 	bx r1
+
+SaveBankAbility:
+	ldr r1, =0x02024064 //active_bank
+	ldrb r1, [r1]
+	lsl r1, #1
+	ldr r2, =0x0203F000 //一个用于储存在场精灵的特性的数组
+	strh r0, [r1, r2]
+	bx lr
 
 wildbattle_clear_battleflags:
     ldr r4, =battle_flags

@@ -658,6 +658,7 @@ battle_strings_table = 0x085CC270;
 update_rtc = 0x0802F588|1; /*JeremyZ*/
 rtc_hex = 0x03005CF8; /*JeremyZ*/
 
+GetAbilityBySpecies_call = 0x097A0000|1;
 gBankAbilities = 0x0203F000;
 last_used_ability = 0x0203F008;
 gRecordAbilities = 0x0203F00A;

@@ -34,6 +34,7 @@ SRC = './src'
 BUILD = './build'
 ASFLAGS = [AS, '-mthumb', '-I', SRC]
 LDFLAGS = ['BPEE.ld', '-T', 'linker.ld']
+LDFLAGS_next = ['BPEE.ld', '-T', 'linker_next.ld']
 CFLAGS = [CC,'-mthumb', '-mno-thumb-interwork', '-mcpu=arm7tdmi', '-mtune=arm7tdmi',
           '-mno-long-calls', '-march=armv4t', '-Wall','-Wextra', '-Os', '-fira-loop-pressure', '-fipa-pta']
 
@@ -64,6 +65,12 @@ def process(in_file,cmd,msg):
         run_command(cmd+['-c', in_file, '-o', out_file])
     return out_file
 
+def process_next(in_file,cmd,msg):
+    out_file = make_output_file(in_file)
+    if file_modifiled(in_file, out_file):
+        print(msg % in_file)
+        run_command(cmd+['-c', in_file, '-o', out_file])
+    return out_file
 
 def process_assembly(in_file):
     return process(in_file,ASFLAGS,'Assembling %s')
@@ -71,6 +78,9 @@ def process_assembly(in_file):
 
 def process_c(in_file):
     return process(in_file,CFLAGS,'Compiling %s')
+
+def process_c_next(in_file):
+    return process_next(in_file,CFLAGS,'CompilingNext %s')
 
 def process_cpp(in_file):
     return process(in_file,CPPFLAGS,'Compiling %s')
@@ -82,20 +92,36 @@ def link(objects):
     run_command(cmd)
     return linked
 
+def link_next(objects):
+    """Link objects into one binary"""
+    linked = 'build/linked_next.o'
+    cmd = [LD] + LDFLAGS_next + ['-o', linked] + list(objects)
+    run_command(cmd)
+    return linked
 
 def objcopy(binary):
     cmd = [OBJCOPY, '-O', 'binary', binary, 'build/output.bin']
     run_command(cmd)
 
+def objcopy_next(binary):
+    cmd = [OBJCOPY, '-O', 'binary', binary, 'build/more_abilities_list.bin']
+    run_command(cmd)
 
 def run_glob(globstr, fn):
     """Glob recursively and run the processor function on each file in result"""
     if sys.version_info > (3, 4):
         files = glob(os.path.join(SRC, globstr), recursive=True)
+        if './src\MoreAbilities\MoreAbilities.c' in files:
+            # 重新指定MoreAbilities.c写入的位置
+            files.remove('./src\MoreAbilities\MoreAbilities.c')
         return map(fn, files)
     else:
         files = Path(SRC).glob(globstr)
         return map(fn, map(str, files))
+
+def run_glob_next(globstr, fn):
+    files = glob(globstr)
+    return map(fn, files)
 
 
 def main():
@@ -112,7 +138,17 @@ def main():
     # Link and extract raw binary
     linked = link(itertools.chain.from_iterable(objects))
     objcopy(linked)
+	
+def main_next():
+    globs = [('./src\MoreAbilities\MoreAbilities.c', process_c_next)]
+    # Gather source files and process them
+    objects = itertools.starmap(run_glob_next, globs)
+
+    # Link and extract raw binary
+    linked = link_next(itertools.chain.from_iterable(objects))
+    objcopy_next(linked)
 
 
 if __name__ == '__main__':
     main()
+    main_next()

@@ -9,6 +9,7 @@ import textwrap
 import sys
 
 OFFSET_TO_PUT = 0x1d00000
+CUSTOM_OFFSET = 0x17A0000
 FIX_EVO=False
 
 PathVar = os.environ.get('Path')
@@ -49,8 +50,40 @@ def get_text_section():
 		
 		return offset
 		
+def get_text_section_next():
+		# Dump sections
+		out = subprocess.check_output([OBJDUMP, '-t', 'build/linked_next.o'])
+		lines = out.decode().split('\n')
+		
+		# Find text section
+		text = filter(lambda x: x.strip().endswith('.text'), lines)
+		section = (list(text))[0]
+		
+		# Get the offset
+		offset = int(section.split(' ')[0], 16)
+		
+		return offset
+		
 def symbols(subtract=0):
 		out = subprocess.check_output([NM, 'build/linked.o'])
+		lines = out.decode().split('\n')
+		ret = {}
+		for line in lines:
+				parts = line.strip().split()
+				
+				if (len(parts) < 3):
+						continue
+						
+				if parts[1].lower() not in {'t', 'd', 'w'}:
+						continue
+						
+				offset = int(parts[0], 16)
+				ret[parts[2]] = offset - subtract
+				
+		return ret
+		
+def symbols_next(subtract=0):
+		out = subprocess.check_output([NM, 'build/linked_next.o'])
 		lines = out.decode().split('\n')
 		ret = {}
 		for line in lines:
@@ -131,6 +164,11 @@ shutil.copyfile("BPEE0.gba", ROM_NAME)
 with open(ROM_NAME, 'rb+') as rom:
 		print("Inserting code.")
 		table = symbols(get_text_section())
+		table_next = symbols_next(get_text_section_next())
+		rom.seek(CUSTOM_OFFSET)
+		with open('build/more_abilities_list.bin', 'rb') as binary_next:
+				rom.write(binary_next.read())
+				binary_next.close()
 		rom.seek(OFFSET_TO_PUT)
 		with open('build/output.bin', 'rb') as binary:
 				rom.write(binary.read())
@@ -139,6 +177,9 @@ with open(ROM_NAME, 'rb+') as rom:
 		# Adjust symbol table
 		for entry in table:
 				table[entry] += OFFSET_TO_PUT
+				
+		for entry_next in table_next:
+				table_next[entry_next] += CUSTOM_OFFSET
 
 		# Read hooks from a file
 		with open('hooks', 'r') as hooklist:
@@ -148,6 +189,10 @@ with open(ROM_NAME, 'rb+') as rom:
 						symbol, address, register = line.split()
 						offset = int(address, 16) - 0x08000000
 						try:
+								if symbol == 'GetAbilityBySpecies':
+									code = table_next[symbol]
+									hook(rom, code, offset, int(register))
+									continue
 								code = table[symbol]
 						except KeyError:
 								print('Symbol missing:', symbol)
@@ -222,6 +267,10 @@ with open(ROM_NAME, 'rb+') as rom:
 		for key in sorted(table.keys()):
 					fstr = ('{:' + str(width) + '} {:08X}')
 					offset_file.write(fstr.format(key + ':', table[key] + 0x08000000) + '\n')
+					
+		for key_next in sorted(table_next.keys()):
+					fstr = ('{:' + str(width) + '} {:08X}')
+					offset_file.write(fstr.format(key_next + ':', table_next[key_next] + 0x08000000) + '\n')
 		offset_file.close()
 
 

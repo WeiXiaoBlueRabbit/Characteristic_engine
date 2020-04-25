@@ -15,4 +15,6 @@ u16 GetAbilityBySpecies(u16 species, u8 slot)
 static const u16 gPokeAbilities[][3] = {
 //  特性1   特性2   特性3
     {0,     0,     0},
+    {4,     5,     6},
+    {1,     2,     3},
 };

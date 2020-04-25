@@ -1,7 +1,7 @@
 #include "defines.h"
 #include "static_references.h"
 
-bool check_ability(u8 bank, u8 ability);
+bool check_ability(u8 bank, u16 ability);
 void set_attacking_move_type();
 u8 get_airborne_state(u8 bank, u8 mode, u8 check_levitate);
 u8 item_battle_effects(u8 switchid, u8 bank, u8 moveturn);

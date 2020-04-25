@@ -259,7 +259,7 @@ extern const u8 z_move_names_table[47][15];
 extern const u8 type_names[TYPE_FAIRY][7];
 extern u8* battlescripts_table[183];
 
-//????
+//More abilities
 extern u16 gBankAbilities[4];
 extern u16 gRecordAbilities[4];
 

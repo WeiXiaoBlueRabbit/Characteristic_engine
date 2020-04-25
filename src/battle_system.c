@@ -1,7 +1,7 @@
 #include "defines.h"
 #include "static_references.h"
 
-bool check_ability(u8 bank, u8 ability);
+bool check_ability(u8 bank, u16 ability);
 bool find_move_in_table(u16 move, const u16* table_ptr);
 u8 healblock_forbidden_moves(u16 move, u8 with_leechseed);
 u8 gravity_forbidden_move(u16 move);

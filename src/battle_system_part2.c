@@ -6,7 +6,7 @@ struct pokemon* get_bank_poke_ptr(u8 bank);
 u8 is_poke_valid(struct pokemon* poke);
 u8 count_party_pokemon(u8 bank);
 void revert_form_change(u8 mega_revert, u8 teamID, u8 side, struct pokemon* poke);
-u8 check_ability(u8 bank, u8 ability);
+u8 check_ability(u8 bank, u16 ability);
 void copy_status_condition_text(u8 bank, u8 confusion);
 void b_load_sprite_player(struct pokemon* poke, u8 bank);
 u8* get_poke_nick2(struct pokemon* poke, u8 bank, u8* dst);

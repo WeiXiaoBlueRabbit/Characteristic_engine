@@ -6,7 +6,7 @@ bool find_move_in_table(u16 move, const u16* table_ptr);
 void setup_berry_consume_buffers(u8 bank);
 u8 get_item_effect(u8 bank, u8 check_negating_effects);
 u8 has_ability_effect(u8 bank, u8 mold_breaker, u8 gastro);
-bool check_ability(u8 bank, u8 ability);
+bool check_ability(u8 bank, u16 ability);
 void bs_push_current(void* now);
 bool not_impostered(u8 bank); //JeremyZ
 u32 random_value(u32 limit);

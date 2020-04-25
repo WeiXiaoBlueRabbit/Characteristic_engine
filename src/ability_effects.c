@@ -25,7 +25,7 @@ void reset_terrains(struct field_affecting* field);
 u8 terrains_get_turns(u8 bank);
 s8 get_priority(u16 move, u8 bank);
 bool handle_primal_reversion(u8 bank);
-bool check_ability(u8 bank, u8 ability);
+bool check_ability(u8 bank, u16 ability);
 u8 get_item_effect(u8 bank, bool check_negating_effects);
 u8 get_attacking_move_type(void);
 struct pokemon* get_bank_poke_ptr(u8 bank);

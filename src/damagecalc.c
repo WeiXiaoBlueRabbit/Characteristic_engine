@@ -11,7 +11,7 @@ u8 has_ability_effect(u8 bank, u8 mold_breaker);
 s8 get_move_position(u8 bank, u16 move);
 u8 weather_abilities_effect();
 u8 is_of_type(u8 bank, u8 type);
-bool check_ability(u8 bank, u8 ability);
+bool check_ability(u8 bank, u16 ability);
 u8 is_bank_present(u8 bank);
 void move_to_buff1(u16 move);
 u8 get_bank_side(u8 bank);

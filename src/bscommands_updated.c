@@ -2,7 +2,7 @@
 #include "static_references.h"
 
 u8 hp_condition(u8 bank, u8 percent);
-bool check_ability(u8 bank, u8 ability);
+bool check_ability(u8 bank, u16 ability);
 u32 percent_lose(u32 number, u16 percent);
 u32 percent_boost(u32 number, u16 percent);
 u8 is_of_type(u8 bank, u8 type);
@@ -50,7 +50,7 @@ void move_to_buff1(u16 move);
 bool try_stealing_bank_item(u8 thief_bank, u8 victim_bank);
 u8 check_field_for_ability(enum poke_abilities ability, u8 side_to_ignore, u8 mold);
 enum poke_abilities get_ally_ability(u8 bank, u8 mold);
-u8 findability_in_table(u8 ability, const u8* table);
+u16 findability_in_table(u16 ability, const u8* table);
 u8 get_battle_bank(u8 to_get);
 u8 check_if_move_failed(u8 bank);
 void prep_string(u16 strID, u8 bank);
@@ -3971,7 +3971,7 @@ void atk89_changestats(void) //BANK orred by 0x40 if self inflicted and fail add
 void atk45_playanimation(void) //u8 bank, u8 animID, void halfword helper
 {
 	u8 bank = get_battle_bank(read_byte(battlescripts_curr_instruction + 1));
-	u8 animID = read_byte(battlescripts_curr_instruction + 2);
+	u16 animID = read_hword(battlescripts_curr_instruction + 2);
 	u16 info = 0;
 	void* info_ptr = (void*) read_word(battlescripts_curr_instruction + 3);
 	if (info_ptr)

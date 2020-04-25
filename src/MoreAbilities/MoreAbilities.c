@@ -2,6 +2,7 @@
 #include "../static_references.h"
 
 u16 GetAbilityBySpecies(u16 species, u8 slot);
+u16 GetBankAbilities(u8 bank);
 static const u16 gPokeAbilities[][3];
 
 /**
@@ -10,6 +11,14 @@ static const u16 gPokeAbilities[][3];
 u16 GetAbilityBySpecies(u16 species, u8 slot)
 {
     return gPokeAbilities[species][slot];
+}
+
+/**
+ * @用于获取bank特性
+ */
+u16 GetBankAbilities(u8 bank)
+{
+	return gBankAbilities[bank];
 }
 
 static const u16 gPokeAbilities[][3] = {

@@ -259,4 +259,7 @@ extern const u8 z_move_names_table[47][15];
 extern const u8 type_names[TYPE_FAIRY][7];
 extern u8* battlescripts_table[183];
 
+//特性扩容
+extern const u16 gBankAbilities[4];
+
 #endif /* static_references */

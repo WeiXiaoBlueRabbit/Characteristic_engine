@@ -13,14 +13,6 @@ u16 GetAbilityBySpecies(u16 species, u8 slot)
     return gPokeAbilities[species][slot];
 }
 
-/**
- * @用于获取bank特性
- */
-u16 GetBankAbilities(u8 bank)
-{
-	return gBankAbilities[bank];
-}
-
 static const u16 gPokeAbilities[][3] = {
 //  特性1   特性2   特性3
     {0x0,0x0,0x0}, //0x0000

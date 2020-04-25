@@ -4,7 +4,7 @@
 //#include "types.h"
 
 extern u16 battle_turn_random_no;
-extern u8 last_used_ability;
+extern u16 last_used_ability;
 extern u16 last_used_item;
 extern u8 banks_by_side[4];
 /*extern u8 bank_attacker;
@@ -18,7 +18,6 @@ extern u8 bank_attacker0[4];
 #define bank_partner_def bank_attacker0[3]
 
 extern u8 crit_loc;
-extern u8 abilities_by_banks[4];
 extern u16 curr_move_BP;
 extern u16 current_move;
 extern u16 last_used_move;

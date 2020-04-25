@@ -11,7 +11,7 @@ void atk04_critcalc(void)
 {
     u8 crit_chance = 0;
     crit_loc = 1;
-    u8 def_ability = battle_participants[bank_target].ability_id;
+    u16 def_ability = gBankAbilities[bank_target];
     if (!(has_ability_effect(bank_target, 1) && (def_ability == ABILITY_SHELL_ARMOR || def_ability == ABILITY_BATTLE_ARMOR))
          && !status3[bank_attacker].atk_cant_crt && !battle_flags.wally && !(battle_flags.save_birch && get_bank_side(bank_attacker))
         && !new_battlestruct->side_affecting[get_bank_side(bank_target)].lucky_chant)

@@ -595,7 +595,7 @@ void jumpifcantpoison(void)
         battlescripts_curr_instruction = (void*) 0x82D9F2E;
         break;
     case 4: //ability prevention
-        last_used_ability = battle_participants[bank_target].ability_id;
+        last_used_ability = gBankAbilities[bank_target];
         record_usage_of_ability(bank_target, last_used_ability);
         battlescripts_curr_instruction = (void*) 0x82D8F63;
         break;
@@ -619,7 +619,7 @@ void jumpifcantparalyze(void)
         battlescripts_curr_instruction = (void*) 0x82D9F2E;
         break;
     case 4: //ability prevention
-        last_used_ability = battle_participants[bank_target].ability_id;
+        last_used_ability = gBankAbilities[bank_target];
         record_usage_of_ability(bank_target, last_used_ability);
         battlescripts_curr_instruction = (void*) 0x82D9362;
         break;
@@ -974,7 +974,7 @@ const u8 forbidenabilitiestable3[] = {ABILITY_WONDER_GUARD, ABILITY_STANCE_CHANG
                                     ABILITY_ZEN_MODE, ABILITY_POWER_OF_ALCHEMY, ABILITY_RECEIVER, ABILITY_DISGUISE, ABILITY_SCHOOLING, ABILITY_SHIELDS_DOWN, ABILITY_BATTLE_BOND, ABILITY_RKS_SYSTEM, ABILITY_POWER_CONSTRUCT, 0xFF};
 const u8 forbidenabilitiestable4[] = {ABILITY_MULTITYPE, ABILITY_TRUANT, ABILITY_STANCE_CHANGE, ABILITY_SCHOOLING, ABILITY_COMATOSE, ABILITY_SHIELDS_DOWN, ABILITY_DISGUISE, ABILITY_BATTLE_BOND, ABILITY_RKS_SYSTEM, ABILITY_POWER_CONSTRUCT, 0xFF};
 
-bool findability_in_table(u8 ability, const u8* table)
+bool findability_in_table(u16 ability, const u8* table)
 {
     for (u32 i = 0; table[i] != 0xFF; i++)
     {
@@ -987,8 +987,8 @@ bool findability_in_table(u8 ability, const u8* table)
 void ability_change(void)
 { //table goes Swapping/attackers change/targets change
     u8 fail = 0;
-    u8* ability_atk = &battle_participants[bank_attacker].ability_id;
-    u8* ability_def = &battle_participants[bank_target].ability_id;
+    u16* ability_atk = &gBankAbilities[bank_attacker];
+    u16* ability_def = &gBankAbilities[bank_target];
     switch (move_table[current_move].arg1)
     {
         case 0: //swapping abilities
@@ -996,7 +996,7 @@ void ability_change(void)
                 fail = 1;
             else
             {
-                u8 placeholder = *ability_atk;
+                u16 placeholder = *ability_atk;
                 *ability_atk = *ability_def;
                 *ability_def = placeholder;
                 battle_communication_struct.multistring_chooser = 0;
@@ -1045,8 +1045,8 @@ void ability_change(void)
     else
     {
         battlescripts_curr_instruction += 4;
-        abilities_by_banks[bank_attacker] = *ability_atk;
-        abilities_by_banks[bank_target] = *ability_def;
+        gBankAbilities[bank_attacker] = *ability_atk;
+        gBankAbilities[bank_target] = *ability_def;
 		check_weather_trio(); //Weather Trio
     }
 }
@@ -1183,7 +1183,7 @@ void countercalc(void)
 
 void gastroacid(void)
 {
-    u16 targets_ability = battle_participants[bank_target].ability_id;
+    u16 targets_ability = gBankAbilities[bank_target];
     if (findability_in_table(targets_ability, forbidenabilitiestable2))
         battlescripts_curr_instruction = (void*) read_word(battlescripts_curr_instruction);
     else
@@ -1216,7 +1216,7 @@ void naturalgift(void)
 {
     u16 item = battle_participants[bank_attacker].held_item;
     u8 effect = 1;
-    if (battle_participants[bank_attacker].ability_id == ABILITY_KLUTZ || new_battlestruct->bank_affecting[bank_attacker].embargo || new_battlestruct->field_affecting.magic_room)
+    if (gBankAbilities[bank_attacker] == ABILITY_KLUTZ || new_battlestruct->bank_affecting[bank_attacker].embargo || new_battlestruct->field_affecting.magic_room)
         effect = 0;
     if (!effect || !item || get_item_pocket_id(item) != 4)
         battlescripts_curr_instruction = (void*) read_word(battlescripts_curr_instruction);
@@ -2079,9 +2079,9 @@ void allyswitch_dataswitch(void)
     battle_resources->battle_history->used_moves[ally_bank] = attacker7;
 
     //abilities in RAM
-    u8 attackerability = abilities_by_banks[bank_attacker];
-    abilities_by_banks[bank_attacker] = abilities_by_banks[ally_bank];
-    abilities_by_banks[ally_bank] = attackerability;
+    u16 attackerability = gBankAbilities[bank_attacker];
+    gBankAbilities[bank_attacker] = gBankAbilities[ally_bank];
+    gBankAbilities[ally_bank] = attackerability;
 
     //in-party position
     u16* partyAttacker = &battle_team_id_by_side[bank_attacker];
@@ -2904,7 +2904,7 @@ void check_soulheart(void)
         }
         static const u8 cant_receive_abilities[] = {ABILITY_FLOWER_GIFT, ABILITY_FORECAST, ABILITY_ILLUSION, ABILITY_IMPOSTER, ABILITY_MULTITYPE, ABILITY_STANCE_CHANGE, ABILITY_TRACE, ABILITY_WONDER_GUARD, ABILITY_ZEN_MODE};
         if (battle_flags.double_battle && (check_ability(i, ABILITY_POWER_OF_ALCHEMY) || check_ability(i, ABILITY_RECEIVER)) && !battle_participants[i ^ 2].current_hp
-                 && !findability_in_table(battle_participants[i ^ 2].ability_id ,cant_receive_abilities) && is_bank_present(i) && !(*done & BIT_GET(i)))
+                 && !findability_in_table(gBankAbilities[i ^ 2] ,cant_receive_abilities) && is_bank_present(i) && !(*done & BIT_GET(i)))
         {
 
             *done |= BIT_GET(i);
@@ -2919,9 +2919,9 @@ void check_soulheart(void)
 
 void receiver_effect(void)
 {
-    u8 new_ability = battle_participants[bank_attacker ^ 2].ability_id;
-    battle_participants[bank_attacker].ability_id = new_ability;
-    abilities_by_banks[bank_attacker] = new_ability;
+    u16 new_ability = gBankAbilities[bank_attacker ^ 2];
+    gBankAbilities[bank_attacker] = new_ability;
+    gBankAbilities[bank_attacker] = new_ability;
     record_usage_of_ability(bank_attacker, new_ability);
     last_used_ability = new_ability;
 }

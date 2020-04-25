@@ -9,7 +9,7 @@ u8 has_ability_effect(u8 bank, u8 mold_breaker);
 
 bool check_ability(u8 bank, u8 ability)
 {
-    if (has_ability_effect(bank, 0) && battle_participants[bank].ability_id == ability)
+    if (has_ability_effect(bank, 0) && gBankAbilities[bank] == ability)
         return 1;
     return 0;
 }

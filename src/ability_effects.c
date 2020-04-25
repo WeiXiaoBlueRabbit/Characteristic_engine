@@ -48,10 +48,10 @@ bool has_ability_effect(u8 bank, u8 mold_breaker) {
     if (new_battlestruct->bank_affecting[bank].gastro_acided)
         return false;
 
-    u8 bank_ability = battle_participants[bank].ability_id;
+    u16 bank_ability = gBankAbilities[bank];
     if (mold_breaker && bank != bank_attacker && bank_ability != ABILITY_SHADOW_SHIELD &&
         bank_ability != ABILITY_PRISM_ARMOR && bank_ability != ABILITY_FULL_METAL_BODY) {
-        u8 attacker_ability = battle_participants[bank_attacker].ability_id;
+        u16 attacker_ability = gBankAbilities[bank_attacker];
         static const u16 const mold_moves[] = {MOVE_PHOTON_GEYSER, MOVE_MOONGEIST_BEAM,
                 MOVE_SUNSTEEL_STRIKE, MOVE_Z_SOLGALEO, MOVE_Z_LUNALA, MOVE_Z_NECROZMA, 0xFFFF};
         if (!new_battlestruct->bank_affecting[bank_attacker].gastro_acided && (
@@ -65,7 +65,7 @@ bool has_ability_effect(u8 bank, u8 mold_breaker) {
 
 u8 check_field_for_ability(enum poke_abilities ability, u8 side_to_ignore, u8 mold) {
     for (u8 i = 0; i < no_of_all_banks; i++) {
-        if (is_bank_present(i) && get_bank_side(i) != side_to_ignore && battle_participants[i].ability_id == ability &&
+        if (is_bank_present(i) && get_bank_side(i) != side_to_ignore && gBankAbilities[i] == ability &&
             has_ability_effect(i, mold))
             return i + 1;
     }
@@ -75,7 +75,7 @@ u8 check_field_for_ability(enum poke_abilities ability, u8 side_to_ignore, u8 mo
 enum poke_abilities get_ally_ability(u8 bank, u8 mold) {
     u8 ally = bank ^2;
     if (is_bank_present(ally) && has_ability_effect(ally, mold))
-        return battle_participants[ally].ability_id;
+        return gBankAbilities[ally];
     return 0;
 }
 
@@ -276,7 +276,7 @@ u8 ability_battle_effects(u8 switch_id, u8 bank, u8 ability_to_check, u8 special
     if (special_cases_argument)
         last_used_ability = special_cases_argument;
     else
-        last_used_ability = battle_participants[bank].ability_id;
+        last_used_ability = gBankAbilities[bank];
 
     u8 bank_side = get_bank_side(bank);
     u8 common_effect = 0;
@@ -595,7 +595,7 @@ u8 ability_battle_effects(u8 switch_id, u8 bank, u8 ability_to_check, u8 special
                         if (battle_participants[bank_attacker].current_hp && curr_hp == 0 && contact &&
                             !(ability_battle_effects(0x13, 0, ABILITY_DAMP, 0, 0)) &&
                             !(has_ability_effect(bank_attacker, 0) &&
-                              battle_participants[bank_attacker].ability_id == ABILITY_MAGIC_GUARD)) {
+                              gBankAbilities[bank_attacker] == ABILITY_MAGIC_GUARD)) {
                             damage_loc = get_1_4_of_max_hp(bank_attacker);
                             effect = true;
                             bs_push_current(BS_AFTERMATH);
@@ -609,7 +609,7 @@ u8 ability_battle_effects(u8 switch_id, u8 bank, u8 ability_to_check, u8 special
                         }
                         break;
                     case ABILITY_MUMMY: {
-                        u8 ability = battle_participants[bank_attacker].ability_id;
+                        u16 ability = gBankAbilities[bank_attacker];
 
 
                         if (contact) {
@@ -627,7 +627,7 @@ u8 ability_battle_effects(u8 switch_id, u8 bank, u8 ability_to_check, u8 special
                                         break;
                                 default:
                                     effect = true;
-                                    battle_participants[bank_attacker].ability_id = ABILITY_MUMMY;
+                                    gBankAbilities[bank_attacker] = ABILITY_MUMMY;
                                     bs_push_current(BS_MUMMY);
                             }
                         }
@@ -741,7 +741,7 @@ u8 ability_battle_effects(u8 switch_id, u8 bank, u8 ability_to_check, u8 special
         case 5: //status immunities
             for (u8 i = 0; i < no_of_all_banks; i++) {
                 if (has_ability_effect(i, 0)) {
-                    switch (battle_participants[i].ability_id) {
+                    switch (gBankAbilities[i]) {
                         case ABILITY_LIMBER:
                             if (battle_participants[i].status.flags.paralysis)
                                 common_effect = 1;
@@ -882,7 +882,7 @@ u8 ability_battle_effects(u8 switch_id, u8 bank, u8 ability_to_check, u8 special
             break;
         case 15: //check field except the bank
             for (u8 i = 0; i < no_of_all_banks; i++) {
-                if (battle_participants[i].ability_id == ability_to_check && i != bank &&
+                if (gBankAbilities[i] == ability_to_check && i != bank &&
                     has_ability_effect(i, special_cases_argument)) {
                     effect = i + 1;
                     last_used_ability = ability_to_check;
@@ -892,7 +892,7 @@ u8 ability_battle_effects(u8 switch_id, u8 bank, u8 ability_to_check, u8 special
             break;
         case 16: //count instances of ability in the opponent field
             for (u8 i = 0; i < no_of_all_banks; i++) {
-                if (get_bank_side(i) != bank_side && battle_participants[i].ability_id == ability_to_check &&
+                if (get_bank_side(i) != bank_side && gBankAbilities[i] == ability_to_check &&
                     has_ability_effect(i, special_cases_argument)) {
                     effect++;
                     last_used_ability = ability_to_check;
@@ -901,7 +901,7 @@ u8 ability_battle_effects(u8 switch_id, u8 bank, u8 ability_to_check, u8 special
             break;
         case 17: //count instances of ability in the banks field
             for (u8 i = 0; i < no_of_all_banks; i++) {
-                if (get_bank_side(i) == bank_side && battle_participants[i].ability_id == ability_to_check &&
+                if (get_bank_side(i) == bank_side && gBankAbilities[i] == ability_to_check &&
                     has_ability_effect(i, special_cases_argument)) {
                     effect++;
                     last_used_ability = ability_to_check;
@@ -910,7 +910,7 @@ u8 ability_battle_effects(u8 switch_id, u8 bank, u8 ability_to_check, u8 special
             break;
         case 18: //count instances of ability except bank
             for (u8 i = 0; i < no_of_all_banks; i++) {
-                if (i != bank_side && battle_participants[i].ability_id == ability_to_check &&
+                if (i != bank_side && gBankAbilities[i] == ability_to_check &&
                     has_ability_effect(i, special_cases_argument)) {
                     effect++;
                     last_used_ability = ability_to_check;
@@ -1149,12 +1149,12 @@ u8 ability_battle_effects(u8 switch_id, u8 bank, u8 ability_to_check, u8 special
                                 active_bank = active_bank ^ 2;
                         } else if (!bank1exists)
                             break;
-                        last_used_ability = battle_participants[active_bank].ability_id;
+                        last_used_ability = gBankAbilities[active_bank];
                         if (!last_used_ability || last_used_ability == ABILITY_TRACE)
                             break;
                         script_ptr = BS_TRACE;
                         bs_execute(script_ptr);
-                        battle_participants[bank].ability_id = last_used_ability;
+                        gBankAbilities[bank] = last_used_ability;
                         battle_scripting.active_bank = bank;
                         new_battlestruct->various.active_bank = bank;
                         battle_stuff_ptr->intimidate_user = bank;

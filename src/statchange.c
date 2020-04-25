@@ -27,7 +27,7 @@ u8 change_stats(u8 bank, u8 bits, void* bs_unable) //returns 1 if unable to chan
     battle_scripting.active_bank = bank;
 
     u8* statchanger = &battle_scripting.stat_changer;
-    u8 ability = battle_participants[bank].ability_id;
+    u16 ability = gBankAbilities[bank];
     if (!has_ability_effect(bank, (bank == bank_target)))
         ability = 0;
 

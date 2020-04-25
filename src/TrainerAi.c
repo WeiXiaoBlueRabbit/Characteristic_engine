@@ -103,9 +103,9 @@ bool is_ability_preventing_switching(u8 preventing_bank, u8 prevented_bank)
 
 u8 ai_get_ability(u8 bank, u8 gastro)
 {
-    u8 ability;
+    u16 ability;
     if (is_bank_ai(bank))
-        ability = battle_participants[bank].ability_id;
+        ability = gBankAbilities[bank];
     else
     {
         u8 recorded_ability = battle_resources->battle_history->ability[bank];
@@ -115,7 +115,7 @@ u8 ai_get_ability(u8 bank, u8 gastro)
         else if (!has_poke_hidden_ability(species) && !(*basestat_table)[species].ability2) //poke has only one ability
             ability = (*basestat_table)[species].ability1;
         else if (is_ability_preventing_switching(bank, bank ^ 1) || is_ability_preventing_switching(bank, bank ^ 1 ^ 2)) //check if bank prevents escape
-            ability = battle_participants[bank].ability_id;
+            ability = gBankAbilities[bank];
         else
             ability = 0;
     }
@@ -156,7 +156,7 @@ void save_bank_stuff(u8 bank)
     new_battlestruct->trainer_AI.saved_item[bank] = *item;
     if (!get_item_effect(bank, 0)) //ai doesn't know an item the target has
         *item = 0;
-    u8* ability = &battle_participants[bank].ability_id;
+    u16* ability = &gBankAbilities[bank];
     new_battlestruct->trainer_AI.saved_ability[bank] = *ability;
     if (!ai_get_ability(bank, 0)) //ai doesn't know an ability the target has
         *ability = 0;
@@ -168,7 +168,7 @@ void save_bank_stuff(u8 bank)
 void restore_bank_stuff(u8 bank)
 {
     battle_participants[bank].held_item = new_battlestruct->trainer_AI.saved_item[bank];
-    battle_participants[bank].ability_id = new_battlestruct->trainer_AI.saved_ability[bank];
+    gBankAbilities[bank] = new_battlestruct->trainer_AI.saved_ability[bank];
     battle_participants[bank].species = new_battlestruct->trainer_AI.saved_species[bank];
 }
 
@@ -224,7 +224,7 @@ u32 ai_calculate_damage(u8 atk_bank, u8 def_bank, u16 move)
             no_of_hits = 2 + random_value(5)/*__umodsi3(rng(), 3) + __umodsi3(rng(), 2)*/; //2 + 0/1/2 + 0/1 = 2/3/4/5
     }
     u32 damage = damage_loc * no_of_hits;
-    if (no_of_hits == 1 && has_ability_effect(def_bank, 1) && battle_participants[def_bank].ability_id == ABILITY_STURDY && battle_participants[def_bank].current_hp == battle_participants[def_bank].max_hp)
+    if (no_of_hits == 1 && has_ability_effect(def_bank, 1) && gBankAbilities[def_bank] == ABILITY_STURDY && battle_participants[def_bank].current_hp == battle_participants[def_bank].max_hp)
         damage = battle_participants[def_bank].max_hp - 1;
     if (affected_by_substitute(def_bank))
     {

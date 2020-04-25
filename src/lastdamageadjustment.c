@@ -66,7 +66,7 @@ void atk07_final_dmg_calc(void)
             {
                 damage_loc = target_hp - 1;
             }
-            else if (battle_participants[bank_target].ability_id == ABILITY_STURDY && has_ability_effect(bank_target, 1, 1) && (damage_loc >= target_hp) && target_hp == battle_participants[bank_target].max_hp)
+            else if (gBankAbilities[bank_target] == ABILITY_STURDY && has_ability_effect(bank_target, 1, 1) && (damage_loc >= target_hp) && target_hp == battle_participants[bank_target].max_hp)
             {
                 damage_loc = target_hp - 1;
                 move_outcome.sturdied = 1;

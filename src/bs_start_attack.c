@@ -157,7 +157,7 @@ u8 get_target_of_move(u16 move, u8 target_given, u8 adjust) {
 }
 
 u8 calculate_move_type(u8 bank, u16 move, u8 set_bonus) {
-    u8 ability = battle_participants[bank].ability_id;
+    u16 ability = gBankAbilities[bank];
     u8 move_type = TYPE_EGG;
     if (new_battlestruct->bank_affecting[bank].electrify)
         move_type = TYPE_ELECTRIC;
@@ -595,7 +595,7 @@ void bs_start_attack(void) {
             return;
         u16* species = &battle_participants[bank_attacker].species;
         //u8 change = 0;
-        if (battle_participants[bank_attacker].ability_id == ABILITY_STANCE_CHANGE &&
+        if (gBankAbilities[bank_attacker] == ABILITY_STANCE_CHANGE &&
             !battle_participants[bank_attacker].status2.transformed) {
             if (*species == POKE_AEGISLASH_BLADE && current_move == MOVE_KINGS_SHIELD) {
                 *species = POKE_AEGISLASH_SHIELD;

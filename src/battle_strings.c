@@ -943,16 +943,16 @@ u32 b_strcpy_decode(const u8* const src, u8* const dst)
 					string = get_ability_name_ptr(last_used_ability);
 					break;
 				case 24: //attackers ability
-					string = get_ability_name_ptr(abilities_by_banks[bank_attacker]);
+					string = get_ability_name_ptr(gBankAbilities[bank_attacker]);
 					break;
 				case 25: //targets ability
-					string = get_ability_name_ptr(abilities_by_banks[bank_target]);
+					string = get_ability_name_ptr(gBankAbilities[bank_target]);
 					break;
 				case 26: //scripting actives ability
-					string = get_ability_name_ptr(abilities_by_banks[battle_scripting.active_bank]);
+					string = get_ability_name_ptr(gBankAbilities[battle_scripting.active_bank]);
 					break;
 				case 27: //def partners ability
-					string = get_ability_name_ptr(abilities_by_banks[bank_partner_def]);
+					string = get_ability_name_ptr(gBankAbilities[bank_partner_def]);
 					break;
 				case 28: //trainer A class
 				{
@@ -1255,7 +1255,7 @@ void b_buffer_string(u16 strID)
 
 	for (u8 i = 0; i < 4; i++)
 	{
-		abilities_by_banks[i] = Strings->abilities[i];
+		gBankAbilities[i] = Strings->abilities[i];
 	}
 
 	for (u8 i = 0; i < 0x10; i++)

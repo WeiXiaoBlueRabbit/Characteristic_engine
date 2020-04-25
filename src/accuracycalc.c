@@ -115,15 +115,15 @@ u32 accuracy_percent(u16 move, u8 bankatk, u8 bankdef)
 	if (find_move_in_table(move, ignore_targetstats_moves) || check_ability(bankatk, ABILITY_UNAWARE))
 		evs_buff = 6;
 	else if (evs_buff > 6 && (battle_participants[bankdef].status2.foresight || new_battlestruct->bank_affecting[bankdef].miracle_eyed
-							  || (battle_participants[bankatk].ability_id == ABILITY_KEEN_EYE && has_ability_effect(bankatk, 0))))
+							  || (gBankAbilities[bankatk] == ABILITY_KEEN_EYE && has_ability_effect(bankatk, 0))))
 		evs_buff = 6;
 
 	u8 accuracy_buff = battle_participants[bankatk].acc_buff;
-	if (battle_participants[bankdef].ability_id == ABILITY_UNAWARE && has_ability_effect(bankdef, 1))
+	if (gBankAbilities[bankdef] == ABILITY_UNAWARE && has_ability_effect(bankdef, 1))
 		accuracy_buff = 6;
 
 	u8 move_accuracy = move_table[move].accuracy;
-	if (has_ability_effect(bankdef, 1) && battle_participants[bankdef].ability_id == ABILITY_WONDER_SKIN && !DAMAGING_MOVE(move) && move_accuracy > 0)
+	if (has_ability_effect(bankdef, 1) && gBankAbilities[bankdef] == ABILITY_WONDER_SKIN && !DAMAGING_MOVE(move) && move_accuracy > 0)
 		move_accuracy = 50;
 	else if ((move == MOVE_THUNDER || move == MOVE_HURRICANE) && weather_abilities_effect() && SUN_WEATHER)
 		move_accuracy = 50;
@@ -137,7 +137,7 @@ u32 accuracy_percent(u16 move, u8 bankatk, u8 bankdef)
 	accuracy = move_accuracy * fraction_stat_buffs2[buff].numerator / fraction_stat_buffs2[buff].denumenator;
 	if (has_ability_effect(bankatk, 0))
 	{
-		switch (battle_participants[bankatk].ability_id)
+		switch (gBankAbilities[bankatk])
 		{
 		case ABILITY_COMPOUND_EYES:
 			accuracy = percent_boost(accuracy, 30);
@@ -156,7 +156,7 @@ u32 accuracy_percent(u16 move, u8 bankatk, u8 bankdef)
 	}
 	if (has_ability_effect(bankdef, 1))
 	{
-		switch (battle_participants[bankdef].ability_id)
+		switch (gBankAbilities[bankdef])
 		{
 		case ABILITY_SAND_VEIL:
 			if (weather_abilities_effect() && SANDSTORM_WEATHER)

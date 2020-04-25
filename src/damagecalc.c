@@ -419,7 +419,7 @@ u16 apply_statboost(u16 stat, u8 boost) {
 u16 get_poke_weight(u8 bank) {
     u16 poke_weight = get_height_or_weight(species_to_national_dex(battle_participants[bank].species), 1);
     if (has_ability_effect(bank, 1)) {
-        switch (battle_participants[bank].ability_id) {
+        switch (gBankAbilities[bank]) {
             case ABILITY_HEAVY_METAL:
                 poke_weight *= 2;
                 break;
@@ -470,7 +470,7 @@ u16 get_speed(u8 bank) {
     //take abilities into account
     if (has_ability_effect(bank, 0)) {
         u8 weather_effect = weather_abilities_effect();
-        switch (battle_participants[bank].ability_id) {
+        switch (gBankAbilities[bank]) {
             case ABILITY_CHLOROPHYLL:
                 if (weather_effect && SUN_WEATHER)
                     speed *= 2;
@@ -835,7 +835,7 @@ u16 apply_base_power_modifiers(u16 move, u8 move_type, u8 atk_bank, u8 def_bank,
     u8 move_split = move_table[move].split & photon_geyser_special(move); //JeremyZ
     //u16 quality_atk_modifier = percent_to_modifier(get_item_quality(battle_participants[atk_bank].held_item));
     if (has_ability_effect(atk_bank, 0)) {
-        switch (battle_participants[atk_bank].ability_id) {
+        switch (gBankAbilities[atk_bank]) {
             case ABILITY_TECHNICIAN:
                 if (base_power <= 60) {
                     modifier = chain_modifier(modifier, 0x1800);
@@ -932,7 +932,7 @@ u16 apply_base_power_modifiers(u16 move, u8 move_type, u8 atk_bank, u8 def_bank,
     //check partner abilities
     u8 atk_partner = atk_bank ^2;
     if (is_bank_present(atk_partner) && has_ability_effect(atk_partner, 0)) {
-        switch (battle_participants[atk_partner].ability_id) {
+        switch (gBankAbilities[atk_partner]) {
             case ABILITY_BATTERY:
                 if (move_split == MOVE_SPECIAL)
                     modifier = chain_modifier(modifier, 0x14CD);
@@ -942,7 +942,7 @@ u16 apply_base_power_modifiers(u16 move, u8 move_type, u8 atk_bank, u8 def_bank,
 
     //check target abilities
     if (has_ability_effect(def_bank, 1)) {
-        switch (battle_participants[def_bank].ability_id) {
+        switch (gBankAbilities[def_bank]) {
             case ABILITY_HEATPROOF:
             case ABILITY_WATER_BUBBLE:
                 if (move_type == TYPE_FIRE)
@@ -1188,7 +1188,7 @@ u16 get_attack_stat(u16 move, u8 move_type, u8 atk_bank, u8 def_bank) {
         attack_boost = battle_participants[stat_bank].sp_atk_buff;
     }
 
-    if (has_ability_effect(def_bank, 1) && battle_participants[def_bank].ability_id == ABILITY_UNAWARE) {
+    if (has_ability_effect(def_bank, 1) && gBankAbilities[def_bank] == ABILITY_UNAWARE) {
         attack_boost = 6;
     } else if (crit_loc == 2 && attack_boost < 6) {
         attack_boost = 6;
@@ -1206,7 +1206,7 @@ u16 get_attack_stat(u16 move, u8 move_type, u8 atk_bank, u8 def_bank) {
         else
             pinch_abilities = true;
 
-        switch (battle_participants[atk_bank].ability_id) {
+        switch (gBankAbilities[atk_bank]) {
             case ABILITY_PURE_POWER:
             case ABILITY_HUGE_POWER:
                 if (move_split == MOVE_PHYSICAL) {
@@ -1512,8 +1512,8 @@ void damage_calc(u16 move, u8 move_type, u8 atk_bank, u8 def_bank, u16 chained_e
             final_modifier = calc_reflect_modifier(atk_bank, def_bank, final_modifier);
     }
 
-    u8 atk_ability = battle_participants[atk_bank].ability_id;
-    u8 def_ability = battle_participants[def_bank].ability_id;
+    u16 atk_ability = gBankAbilities[atk_bank];
+    u16 def_ability = gBankAbilities[def_bank];
     //halve damage if full HP
     if (FULL_HP(def_bank) && (def_ability == ABILITY_SHADOW_SHIELD || def_ability == ABILITY_MULTISCALE) &&
         has_ability_effect(def_bank, 1)) {

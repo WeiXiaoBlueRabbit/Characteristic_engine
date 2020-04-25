@@ -437,7 +437,7 @@ u8 item_battle_effects(u8 switchid, u8 bank, u8 move_turn)
             break;
         case ITEM_EFFECT_STICKYBARB:
             STICKYBARB:
-            if (battle_participants[bank].current_hp && !move_turn && !(has_ability_effect(bank, 0) && battle_participants[bank].ability_id == ABILITY_MAGIC_GUARD))
+            if (battle_participants[bank].current_hp && !move_turn && !(has_ability_effect(bank, 0) && gBankAbilities[bank] == ABILITY_MAGIC_GUARD))
             {
                 effect = NO_COMMON_ITEM_EFFECT;
                 damage_loc = get_1_8_of_max_hp(bank);

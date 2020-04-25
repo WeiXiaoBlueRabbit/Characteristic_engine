@@ -92,7 +92,7 @@ void atkFA_blowifnotdamp(void)
 {
 	for (u8 i = 0; i < 4; i++)
 	{
-		if (is_bank_present(i) && battle_participants[i].ability_id == ABILITY_DAMP && has_ability_effect(i, 1))
+		if (is_bank_present(i) && gBankAbilities[i] == ABILITY_DAMP && has_ability_effect(i, 1))
 		{
 			bank_target = i;
 			last_used_ability = ABILITY_DAMP;
@@ -238,7 +238,7 @@ u8 z_protect_affects(u16 move)
 void calc_recoil_dmg2(void)
 {
 	if ((check_ability(bank_attacker, ABILITY_ROCK_HEAD) || check_ability(bank_attacker, ABILITY_MAGIC_GUARD)) && current_move != MOVE_STRUGGLE) {
-		record_usage_of_ability(bank_attacker, battle_participants[bank_attacker].ability_id);
+		record_usage_of_ability(bank_attacker, gBankAbilities[bank_attacker]);
 		damage_loc = 0;
 		battle_communication_struct.multistring_chooser = 0;
 	}
@@ -276,7 +276,7 @@ bool clanging_scales_stat(void)
 
 
 bool check_ability_with_mold(u8 bank, u8 ability) {
-	return (has_ability_effect(bank, 1) && battle_participants[bank].ability_id == ability);
+	return (has_ability_effect(bank, 1) && gBankAbilities[bank] == ability);
 }
 
 void check_weather_trio(void) {

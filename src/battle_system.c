@@ -252,7 +252,7 @@ u16 get_airborne_state(u8 bank, u8 mode, u8 check_levitate)
         || new_battlestruct->bank_affecting[bank].smacked_down
         || status3[bank].rooted)
         return 1;
-    if (check_levitate && battle_participants[bank].ability_id == ABILITY_LEVITATE && has_ability_effect(bank,mode))
+    if (check_levitate && gBankAbilities[bank] == ABILITY_LEVITATE && has_ability_effect(bank,mode))
         return 4;
     if ((mode==0 && is_of_type(bank,TYPE_FLYING)) || get_item_effect(bank, true) == ITEM_EFFECT_AIRBALLOON ||
         new_battlestruct->bank_affecting[bank].magnet_rise || new_battlestruct->bank_affecting[bank].telekinesis)
@@ -298,7 +298,7 @@ u16 damage_type_effectiveness_update(u16 move, u8 attacking_type, u8 defending_t
         }
     }
 
-    if (((battle_participants[def_bank].status2.foresight || battle_participants[atk_bank].ability_id == ABILITY_SCRAPPY) && (attacking_type== TYPE_NORMAL || attacking_type == TYPE_FIGHTING) && defending_type == TYPE_GHOST) && effect == 0)
+    if (((battle_participants[def_bank].status2.foresight || gBankAbilities[atk_bank] == ABILITY_SCRAPPY) && (attacking_type== TYPE_NORMAL || attacking_type == TYPE_FIGHTING) && defending_type == TYPE_GHOST) && effect == 0)
     {
         effect = 10;
     }
@@ -465,7 +465,7 @@ u8 cant_poison(u8 atk_bank, u8 def_bank, u8 self_inflicted)
     if ((is_of_type(def_bank, TYPE_POISON) || is_of_type(def_bank, TYPE_STEEL)) && !check_ability(atk_bank, ABILITY_CORROSION))
         return 3;
 	
-    u8 ability = battle_participants[def_bank].ability_id;
+    u16 ability = gBankAbilities[def_bank];
     if (!has_ability_effect(def_bank, 0)) {ability = 0;}
     if (ability == ABILITY_IMMUNITY || check_leafguard_shieldsdown(ability, def_bank))
         return 4;
@@ -491,7 +491,7 @@ u8 cant_fall_asleep(u8 bank, u8 self_inflicted)
         return 1;
     if (battle_participants[bank].status.int_status||is_class_FOUR(bank))
         return 2;
-    u8 ability = battle_participants[bank].ability_id;
+    u16 ability = gBankAbilities[bank];
     if (!has_ability_effect(bank, 0)) {ability = 0;}
     if (ability == ABILITY_VITAL_SPIRIT || ability == ABILITY_INSOMNIA || check_leafguard_shieldsdown(ability, bank))
         return 4;
@@ -526,7 +526,7 @@ u8 cant_become_paralyzed(u8 bank, u8 self_inflicted)
         return 2;
     if (is_of_type(bank, TYPE_ELECTRIC))
         return 3;
-    u8 ability = battle_participants[bank].ability_id;
+    u16 ability = gBankAbilities[bank];
     if (!has_ability_effect(bank, 0)) {ability = 0;}
     if (ability == ABILITY_LIMBER || check_leafguard_shieldsdown(ability, bank))
         return 4;
@@ -551,7 +551,7 @@ u8 cant_become_burned(u8 bank, u8 self_inflicted)
         return 2;
     if (is_of_type(bank, TYPE_FIRE))
         return 3;
-    u8 ability = battle_participants[bank].ability_id;
+    u16 ability = gBankAbilities[bank];
     if (!has_ability_effect(bank, 0)) {ability = 0;}
     if (ability == ABILITY_WATER_VEIL || check_leafguard_shieldsdown(ability, bank))
         return 4;
@@ -577,7 +577,7 @@ u8 cant_become_freezed(u8 bank, u8 self_inflicted)
         return 2;
     if (is_of_type(bank, TYPE_ICE))
         return 3;
-    u8 ability = battle_participants[bank].ability_id;
+    u16 ability = gBankAbilities[bank];
     if (!has_ability_effect(bank, 0)) {ability = 0;}
     if (ability == ABILITY_MAGMA_ARMOR || check_leafguard_shieldsdown(ability, bank))
         return 4;
@@ -668,7 +668,7 @@ bool can_lose_item(u8 bank, bool stickyhold_check, bool sticky_message)
     u16 item = battle_participants[bank].held_item;
     u8 item_effect = get_item_effect(bank, 0);
     u16 species = battle_participants[bank].species;
-    if (stickyhold_check && battle_participants[bank].ability_id == ABILITY_STICKY_HOLD && has_ability_effect(bank, 1))
+    if (stickyhold_check && gBankAbilities[bank] == ABILITY_STICKY_HOLD && has_ability_effect(bank, 1))
     {
         can_lose = 0;
         if (sticky_message)
@@ -861,7 +861,7 @@ bool battle_turn_move_effects(void)
                         for (u8 i = 0; i < no_of_all_banks; i++)
                         {
                             bank_attacker = i;
-                            if (battle_participants[i].status.flags.sleep && !(battle_participants[i].ability_id == ABILITY_SOUNDPROOF && has_ability_effect(i, 0)))
+                            if (battle_participants[i].status.flags.sleep && !(gBankAbilities[i] == ABILITY_SOUNDPROOF && has_ability_effect(i, 0)))
                             {
                                 battle_participants[i].status.flags.sleep = 0;
                                 battle_participants[i].status2.nightmare = 0;

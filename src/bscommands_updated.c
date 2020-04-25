@@ -233,7 +233,7 @@ void atk96_weather_damage(void)
 {
 	battlescripts_curr_instruction++;
 	s32 damage = 0;
-	u8 ability = battle_participants[bank_attacker].ability_id;
+	u16 ability = gBankAbilities[bank_attacker];
 	u8 ability_effect = has_ability_effect(bank_attacker, 0);
 	if (weather_abilities_effect() && !(get_item_effect(bank_attacker, 1) == ITEM_EFFECT_SAFETYGOOGLES) &&
 			!(ability_effect && (ability == ABILITY_MAGIC_GUARD || ability == ABILITY_OVERCOAT)) &&
@@ -274,7 +274,7 @@ void atkE2_switchout_abilities(void)
 	if (has_ability_effect(active_bank, 0))
 	{
 		u8 second_arg = bits_table[battle_stuff_ptr->field_58[active_bank]];
-		switch (battle_participants[active_bank].ability_id)
+		switch (gBankAbilities[active_bank])
 		{
 			case ABILITY_NATURAL_CURE:
 				battle_participants[active_bank].status.int_status = 0;
@@ -1952,7 +1952,7 @@ void atk00_move_canceller(void)
 		bs_push_current((void*) 0x082DB194);
 		return;
 	}
-	else if ((battle_participants[bank_target].ability_id == ABILITY_MAGIC_BOUNCE &&
+	else if ((gBankAbilities[bank_target] == ABILITY_MAGIC_BOUNCE &&
 			has_ability_effect(bank_target, 1)) && move_table[current_move].move_flags.flags.affected_by_magic_coat &&
 			new_battlestruct->various.magicbounce == 0 && !protect_affects(current_move, 0) &&
 			!SEMI_INVULNERABLE(bank_target))
@@ -2158,7 +2158,7 @@ void atkD0_set_taunt(void)
 	void* failjump = (void*) read_word(battlescripts_curr_instruction + 1);
 	if (disable_structs[bank_target].taunt_timer || ability_battle_effects(17, bank_target, ABILITY_AROMA_VEIL, 1, 0))
 		battlescripts_curr_instruction = failjump;
-	else if (battle_participants[bank_target].ability_id == ABILITY_OBLIVIOUS && has_ability_effect(bank_target, 1))
+	else if (gBankAbilities[bank_target] == ABILITY_OBLIVIOUS && has_ability_effect(bank_target, 1))
 	{
 		battlescripts_curr_instruction = failjump;
 		record_usage_of_ability(bank_target, ABILITY_OBLIVIOUS);
@@ -2264,7 +2264,7 @@ void atk0F_resultmessage(void)
 void atk70_record_ability_of_bank(void)
 {
 	u8 bank = get_battle_bank(read_byte(battlescripts_curr_instruction + 1));
-	record_usage_of_ability(bank, battle_participants[bank].ability_id);
+	record_usage_of_ability(bank, gBankAbilities[bank]);
 	battlescripts_curr_instruction += 2;
 }
 
@@ -2981,7 +2981,7 @@ void atkE1_intimidate_loop(void)
 	u8 side = get_bank_side(bank);
 	battle_text_buff1[0] = 0xFD;
 	battle_text_buff1[1] = 9;
-	battle_text_buff1[2] = battle_participants[bank].ability_id;
+	battle_text_buff1[2] = gBankAbilities[bank];
 	battle_text_buff1[3] = 0xFF;
 	while (bank_target < no_of_all_banks)
 	{
@@ -3403,7 +3403,7 @@ void atk5C_hitanimation(void)
 		active_bank = bank;
 		bb29_hit_animation(0);
 		mark_buffer_bank_for_execution(bank);
-		if (battle_participants[bank].ability_id == ABILITY_ILLUSION &&
+		if (gBankAbilities[bank] == ABILITY_ILLUSION &&
 				new_battlestruct->bank_affecting[bank].illusion_on && damage_loc > 0 && DAMAGING_MOVE(current_move) &&
 				bank != bank_attacker && bank == bank_target)
 		{
@@ -3460,7 +3460,7 @@ void atk78_explodeifnotdamp(void)
 {
 	for (u8 i = 0; i < 4; i++)
 	{
-		if (is_bank_present(i) && battle_participants[i].ability_id == ABILITY_DAMP && has_ability_effect(i, 1))
+		if (is_bank_present(i) && gBankAbilities[i] == ABILITY_DAMP && has_ability_effect(i, 1))
 		{
 			bank_target = i;
 			last_used_ability = ABILITY_DAMP;
@@ -3879,7 +3879,7 @@ void atk84_jumpifcannotsleep(void)
 	{
 		if (check_ability(bank_target, ABILITY_INSOMNIA) || check_ability(bank_target, ABILITY_VITAL_SPIRIT))
 		{
-			record_usage_of_ability(bank_target, battle_participants[bank_target].ability_id);
+			record_usage_of_ability(bank_target, gBankAbilities[bank_target]);
 			battle_communication_struct.multistring_chooser = 2;
 			battlescripts_curr_instruction = jump_loc;
 		}

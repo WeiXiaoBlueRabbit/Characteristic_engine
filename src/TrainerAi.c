@@ -101,6 +101,8 @@ bool is_ability_preventing_switching(u8 preventing_bank, u8 prevented_bank)
     return 0;
 }
 
+u16 get_ability_by_species(u16 species, u8 slot);
+
 u8 ai_get_ability(u8 bank, u8 gastro)
 {
     u16 ability;
@@ -108,12 +110,12 @@ u8 ai_get_ability(u8 bank, u8 gastro)
         ability = gBankAbilities[bank];
     else
     {
-        u8 recorded_ability = battle_resources->battle_history->ability[bank];
+        u16 recorded_ability = battle_resources->battle_history->ability[bank];
         u16 species = ai_get_species(bank);
         if (recorded_ability)
             ability = recorded_ability;
-        else if (!has_poke_hidden_ability(species) && !(*basestat_table)[species].ability2) //poke has only one ability
-            ability = (*basestat_table)[species].ability1;
+        else if (!has_poke_hidden_ability(species) && !get_ability_by_species(species, 1)) //poke has only one ability
+            ability = get_ability_by_species(species, 0);
         else if (is_ability_preventing_switching(bank, bank ^ 1) || is_ability_preventing_switching(bank, bank ^ 1 ^ 2)) //check if bank prevents escape
             ability = gBankAbilities[bank];
         else
@@ -367,14 +369,15 @@ void tai5F_is_of_type() //u8 bank, u8 type
     tai_current_instruction += 3;
 }
 
-void tai60_checkability() //u8 bank, u8 ability, u8 gastro
+//修改以实现支持读取0xFFFF个特性
+void tai60_checkability() //u8 bank, u16 ability, u8 gastro
 {
     u32* var = &AI_STATE->var;
-    if (ai_get_ability(get_ai_bank(read_byte(tai_current_instruction + 1)), read_byte(tai_current_instruction + 3)) == read_byte(tai_current_instruction + 2))
+    if (ai_get_ability(get_ai_bank(read_byte(tai_current_instruction + 1)), read_byte(tai_current_instruction + 4)) == read_hword(tai_current_instruction + 2))
         *var = 1;
     else
         *var = 0;
-    tai_current_instruction += 4;
+    tai_current_instruction += 5;
 }
 
 u8 is_stat_change_positive(u16 move)

@@ -2,7 +2,8 @@
 #include "../static_references.h"
 
 u16 GetAbilityBySpecies(u16 species, u8 slot);
-u16 GetBankAbilities(u8 bank);
+void RecordAbilityBattle(u8 battlerId, u16 abilityId);
+void ClearBattlerAbilityHistory(u8 battlerId);
 static const u16 gPokeAbilities[][3];
 
 /**
@@ -10,7 +11,23 @@ static const u16 gPokeAbilities[][3];
  */
 u16 GetAbilityBySpecies(u16 species, u8 slot)
 {
-    return gPokeAbilities[species][slot];
+    return (last_used_ability = gPokeAbilities[species][slot]);
+}
+
+/**
+ * @支持0xFFFF个特性
+ */
+void RecordAbilityBattle(u8 battlerId, u16 abilityId)
+{
+	gRecordAbilities[battlerId] = abilityId;
+}
+
+/**
+ * @支持0xFFFF个特性
+ */
+void ClearBattlerAbilityHistory(u8 battlerId)
+{
+	gRecordAbilities[battlerId] = 0;
 }
 
 static const u16 gPokeAbilities[][3] = {

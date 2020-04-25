@@ -445,7 +445,7 @@ gpu_bg_config_set_field = 0x08001B58|1;
 lcd_io_set = 0x080010B4|1;
 
 battle_turn_random_no = 0x02024330;
-last_used_ability = 0x0202420A;
+/* last_used_ability = 0x0202420A; */
 last_used_item = 0x02024208;
 hitmarker = 0x02024280;
 battle_participants = 0x02024084;
@@ -622,6 +622,7 @@ obj_delete = 0x08007244|1;
 update_bank_sprite = 0x080A9708|1;
 bank_sprite_sth = 0x080A9ADC|1;
 get_poke_ability = 0x0806B6D8|1;
+get_ability_by_species = 0x0806b694|1;
 attack_iteration_cleanup = 0x804AF30|1;
 prepare_pokemon_battle_sprite_manipulation_buffer = 0x08034414|1;
 check_failure_due_to_status = 0x803F90C|1;
@@ -658,3 +659,5 @@ update_rtc = 0x0802F588|1; /*JeremyZ*/
 rtc_hex = 0x03005CF8; /*JeremyZ*/
 
 gBankAbilities = 0x0203F000;
+last_used_ability = 0x0203F008;
+gRecordAbilities = 0x0203F00A;

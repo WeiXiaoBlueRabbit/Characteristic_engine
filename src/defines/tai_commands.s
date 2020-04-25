@@ -577,7 +577,8 @@ jumpifbytevarEQ 0 \jumpifnotdoublebattleaddress
 .macro checkability checkabilitybank checkabilityID checkabilityGastro @rewritten
 .byte 0x60
 .byte \checkabilitybank
-.byte \checkabilityID
+// .byte \checkabilityID
+.hword \checkabilityID //支持0xFFFF个特性
 .byte \checkabilityGastro
 .endm
 

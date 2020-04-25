@@ -78,3 +78,5 @@ sub_82E1810 82E1810 1
 #check_attack_new 809B3DC 1
 #bbo_new1 0803B17C 0
 GetAbilityBySpecies 0806B694 3
+RecordAbilityBattle 08131118 3
+ClearBattlerAbilityHistory 08131148 3

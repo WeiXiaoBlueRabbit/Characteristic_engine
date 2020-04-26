@@ -259,6 +259,8 @@ enum poke_abilities
         ABILITY_PERISH_BODY, //0xFD
 		ABILITY_WANDERING_SPIRIT, //0xFE
 		ABILITY_GORILLA_TACTICS, //0xFF
+        
+        ABILITY_TEST //测试 0x100
 };
 
 #endif /* ABILITY_IDS_H */

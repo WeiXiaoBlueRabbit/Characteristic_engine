@@ -1227,13 +1227,15 @@ struct string_inf
 	u16 stringID;
 	u16 moves[2]; //curr move and last move
 	u16 last_item;
-	u8 last_ability;
+	// u8 last_ability;
+	u16 last_ability;
 	u8 scr_active;
 	u8 b_stuff_52;
 	u8 b_stuff_hpbadscale;
 	u8 another_act;
 	u8 move_type;
-	u8 abilities[4];
+	// u8 abilities[4];
+	u16 abilities[4];
 	u8 buffs[3][0x10];
 };
 

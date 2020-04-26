@@ -33,7 +33,7 @@ u8 check_move_limitations(u8 bank, u8 not_usable_moves, u8 limitations);
 u32 accuracy_percent(u16 move, u8 bankatk, u8 bankdef);
 u8 is_poke_valid(struct pokemon* poke);
 struct pokemon* get_party_ptr(u8 bank);
-u8 ability_battle_effects(u8 switch_id, u8 bank, u8 ability_to_check, u8 special_cases_argument, u16 move);
+u8 ability_battle_effects(u8 switch_id, u8 bank, u16 ability_to_check, u8 special_cases_argument, u16 move);
 u8 get_item_effect(u8 bank, u8 check_negating_effects);
 u8 has_ability_effect(u8 bank, u8 mold_breaker);
 s8 get_move_position(u8 bank, u16 move);

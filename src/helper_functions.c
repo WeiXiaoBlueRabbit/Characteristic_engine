@@ -33,7 +33,7 @@ s8 get_move_position(u8 bank, u16 move);
 u8 get_item_effect(u8 bank, u8 check_negating_effects);
 u8 weather_abilities_effect();
 u8* get_slide_msg(u16 trainerID, u8 caseID);
-u8 ability_battle_effects(u8 switch_id, u8 bank, u8 ability_to_check, u8 special_cases_argument, u16 move);
+u8 ability_battle_effects(u8 switch_id, u8 bank, u16 ability_to_check, u8 special_cases_argument, u16 move);
 u16 apply_statboost(u16 stat, u8 boost);
 u32 percent_boost(u32 number, u16 percent);
 bool move_effect_setter(bool primary, bool certain);
@@ -70,7 +70,7 @@ struct pokemon* get_bank_poke_ptr(u8 bank)
     return &get_party_ptr(bank)[battle_team_id_by_side[bank]];
 }
 
-u8 get_poke_ability_active_bank(){
+u16 get_poke_ability_active_bank(){
 	return get_poke_ability(get_bank_poke_ptr(active_bank));
 }
 
@@ -2402,7 +2402,7 @@ void party_heal(void)
         for (u8 i = 0; i < 6; i++)
         {
             condition = get_attributes(&poke[i], ATTR_STATUS_AILMENT, 0);
-            u8 ability = get_poke_ability(&poke[i]);
+            u16 ability = get_poke_ability(&poke[i]);
             if (is_poke_valid(&poke[i]) && condition && ability_to_ignore != ability)
             {
                 effect = 1;

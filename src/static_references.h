@@ -262,5 +262,6 @@ extern u8* battlescripts_table[183];
 //More abilities
 extern u16 gBankAbilities[4];
 extern u16 gRecordAbilities[4];
+extern u16 glPokeAbilities[][3];
 
 #endif /* static_references */

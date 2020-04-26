@@ -5,7 +5,7 @@ u8 get_airborne_state(u8 bank, u8 mode, u8 check_levitate);
 u8 can_lose_item(u8 bank, u8 stickyholdcheck, u8 sticky_message);
 u8 is_item_a_plate(u16 item);
 u16 get_battle_item_extra_param(u32 bank);
-u8 ability_battle_effects(u8 switch_id, u8 bank, u8 ability_to_check, u8 special_cases_argument, u16 move);
+u8 ability_battle_effects(u8 switch_id, u8 bank, u16 ability_to_check, u8 special_cases_argument, u16 move);
 u8 get_item_effect(u8 bank, u8 check_negating_effects);
 u8 has_ability_effect(u8 bank, u8 mold_breaker);
 s8 get_move_position(u8 bank, u16 move);

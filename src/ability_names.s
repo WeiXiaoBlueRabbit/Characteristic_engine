@@ -261,4 +261,6 @@ ability_names_table:
 .byte 0x09, 0x88, 0x0D, 0x5E, 0x10, 0x7F, 0x0B, 0x1D, Termin, Space, Space, Space, Space @Perish Body
 .byte 0x0F, 0x7C, 0x05, 0x77, Termin, Space, Space, Space, Space, Space, Space, Space, Space @Wandering Spirit
 .byte 0x0F, 0x0B, 0x0E, 0x54, 0x0F, 0x0B, 0x0F, 0x32, Termin, Space, Space, Space, Space @Gorilla Tactics 未加入 无影拳 化学变化气体 粉彩护幕 饱了又饿
+
+.byte 0x02, 0x06, 0x0C, 0x19, Termin, Space, Space, Space, Space, Space, Space, Space, Space @测试
 .word 0xFFFFFFFF

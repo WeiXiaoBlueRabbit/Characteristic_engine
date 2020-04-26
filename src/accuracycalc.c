@@ -8,7 +8,7 @@ s8 get_priority(u16 move, u8 bank);
 u16 type_effectiveness_calc(u16 move, u8 move_type, u8 atk_bank, u8 def_bank, u8 effects_handling_and_recording);
 u8 get_attacking_move_type();
 u8 get_item_effect(u8 bank, u8 check_negating_effects);
-u8 ability_battle_effects(u8 switch_id, u8 bank, u8 ability_to_check, u8 special_cases_argument, u16 move);
+u8 ability_battle_effects(u8 switch_id, u8 bank, u16 ability_to_check, u8 special_cases_argument, u16 move);
 u8 has_ability_effect(u8 bank, u8 mold_breaker);
 u8 weather_abilities_effect();
 bool does_move_make_contact(u16 move, u8 atk_bank);

@@ -63,7 +63,7 @@ void __attribute__((long_call)) c2_80777E8(void);
 void __attribute__((long_call)) obj_delete(struct object*);
 void __attribute__((long_call)) update_bank_sprite(u8 bank);
 void __attribute__((long_call)) bank_sprite_sth(u8 bank);
-u8 __attribute__((long_call)) get_poke_ability(struct pokemon* poke);
+u16 __attribute__((long_call)) get_poke_ability(struct pokemon* poke);
 u8 __attribute__((long_call)) get_overworld_weather();
 u32 __attribute__((long_call)) get_trainer_money(u16 trainerID);
 void __attribute__((long_call)) give_money(u32* owned_money, u32 to_add);

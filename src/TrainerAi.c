@@ -17,7 +17,7 @@ u8 find_move_in_table(u16 move, const u16* table_ptr);
 u8 get_first_to_strike(u8 bank1, u8 bank2, u8 ignore_priority);
 u8 get_item_effect(u8 bank, u8 check_negating_effects);
 u8 has_ability_effect(u8 bank, u8 mold_breaker);
-u8 ability_battle_effects(u8 switch_id, u8 bank, u8 ability_to_check, u8 special_cases_argument, u16 move);
+u8 ability_battle_effects(u8 switch_id, u8 bank, u16 ability_to_check, u8 special_cases_argument, u16 move);
 void canuselastresort();
 void belch_canceler();
 void can_magneticflux_work();

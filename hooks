@@ -80,3 +80,5 @@ sub_82E1810 82E1810 1
 GetAbilityBySpecies 0806B694 3
 RecordAbilityBattle 08131118 3
 ClearBattlerAbilityHistory 08131148 3
+BtlController_EmitPrintString 08033be4 3
+BtlController_EmitPrintSelectionString 08033cfc 3

@@ -661,3 +661,4 @@ rtc_hex = 0x03005CF8; /*JeremyZ*/
 gBankAbilities = 0x0203F000;
 last_used_ability = 0x0203F008;
 gRecordAbilities = 0x0203F00A;
+glPokeAbilities = 0x097A0000;

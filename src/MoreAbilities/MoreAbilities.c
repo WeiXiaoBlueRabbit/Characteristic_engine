@@ -1,36 +1,6 @@
 #include "../defines.h"
-#include "../static_references.h"
 
-u16 GetAbilityBySpecies(u16 species, u8 slot);
-void RecordAbilityBattle(u8 battlerId, u16 abilityId);
-void ClearBattlerAbilityHistory(u8 battlerId);
-static const u16 gPokeAbilities[][3];
-
-/**
- * @用于获取精灵特性
- */
-u16 GetAbilityBySpecies(u16 species, u8 slot)
-{
-    return (last_used_ability = gPokeAbilities[species][slot]);
-}
-
-/**
- * @支持0xFFFF个特性
- */
-void RecordAbilityBattle(u8 battlerId, u16 abilityId)
-{
-	gRecordAbilities[battlerId] = abilityId;
-}
-
-/**
- * @支持0xFFFF个特性
- */
-void ClearBattlerAbilityHistory(u8 battlerId)
-{
-	gRecordAbilities[battlerId] = 0;
-}
-
-static const u16 gPokeAbilities[][3] = {
+const u16 gPokeAbilities[][3] = {
 //  特性1   特性2   特性3
     {0x0,0x0,0x0}, //0x0000
 	{0x41,0x41,0x22}, //0x0001 妙蛙种子 {茂盛 茂盛 叶绿素}
@@ -312,7 +282,8 @@ static const u16 gPokeAbilities[][3] = {
 	{0x41,0x41,0x54}, //0x0115 木守宫 {茂盛 茂盛 轻装}
 	{0x41,0x41,0x54}, //0x0116 森林蜥蜴 {茂盛 茂盛 轻装}
 	{0x41,0x41,0x54}, //0x0117 蜥蜴王 {茂盛 茂盛 轻装}
-	{0x42,0x42,0x03}, //0x0118 火稚鸡 {猛火 猛火 加速}
+	// {0x42,0x42,0x03}, //0x0118 火稚鸡 {猛火 猛火 加速}
+	{0x100,0x100,0x100}, //0x0118 火稚鸡 {测试 测试 测试}
 	{0x42,0x42,0x03}, //0x0119 力壮鸡 {猛火 猛火 加速}
 	{0x42,0x42,0x03}, //0x011A 火焰鸡 {猛火 猛火 加速}
 	{0x43,0x43,0x06}, //0x011B 水跃鱼 {激流 激流 湿气}

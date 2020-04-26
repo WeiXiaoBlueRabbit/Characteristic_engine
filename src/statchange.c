@@ -4,7 +4,7 @@
 u8 is_of_type(u8 bank, u8 type);
 u8 protect_affecting_moves(u16 move);
 u8 weather_abilities_effect(void);
-u8 ability_battle_effects(u8 switch_id, u8 bank, u8 ability_to_check, u8 special_cases_argument, u16 move);
+u8 ability_battle_effects(u8 switch_id, u8 bank, u16 ability_to_check, u8 special_cases_argument, u16 move);
 u8 has_ability_effect(u8 bank, u8 mold_breaker);
 u8 get_bank_side(u8 bank);
 void bs_push(void* to_return, void* now);

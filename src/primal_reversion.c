@@ -8,7 +8,7 @@ u16 get_mega_species(u8 bank, u8 chosen_method);
 u8 get_bank_side(u8 bank);
 void bs_execute(void* bs);
 struct pokemon* get_bank_poke_ptr(u8 bank);
-extern u16 GetAbilityBySpecies_call(u16 species, u8 slot);
+u16 get_ability_by_species(u16 species, u8 slot);
 
 u8 get_reversion_type(u8 bank, u16 target_species)
 {
@@ -40,7 +40,7 @@ void set_mega_attr(struct battle_participant* bank_struct, u8 bank, struct pokem
 	bank_struct->type2 = PokeStats->type2;
 
 	//bank_struct->ability_id = PokeStats->ability1;
-	gBankAbilities[bank] = GetAbilityBySpecies_call(new_species, 1);
+	gBankAbilities[bank] = get_ability_by_species(new_species, 1);
 }
 
 bool handle_primal_reversion(u8 bank)

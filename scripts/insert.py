@@ -189,14 +189,16 @@ with open(ROM_NAME, 'rb+') as rom:
 						symbol, address, register = line.split()
 						offset = int(address, 16) - 0x08000000
 						try:
-								if symbol == 'GetAbilityBySpecies' or symbol == 'RecordAbilityBattle' or symbol == 'ClearBattlerAbilityHistory':
-									code = table_next[symbol]
-									hook(rom, code, offset, int(register))
-									continue
+						
 								code = table[symbol]
 						except KeyError:
-								print('Symbol missing:', symbol)
-								continue
+						
+								try:
+										code = table_next[symbol]
+									
+								except KeyError:
+										print('Symbol missing:', symbol)
+										continue
 
 						hook(rom, code, offset, int(register))
 		if FIX_EVO:

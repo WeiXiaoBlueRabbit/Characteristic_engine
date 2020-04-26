@@ -399,7 +399,6 @@ u8 ability_battle_effects(u8 switch_id, u8 bank, u16 ability_to_check, u8 specia
                     bs_execute(BAD_DREAMS_BS);
                     break;
 
-                case ABILITY_TEST:
                 case ABILITY_SPEED_BOOST:
                     if (battle_participants[bank].spd_buff != 0xC && disable_structs[bank].is_first_turn != 2) {
                         effect = 1;

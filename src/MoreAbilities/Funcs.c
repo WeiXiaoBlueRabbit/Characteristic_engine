@@ -57,7 +57,6 @@ void ClearBattlerAbilityHistory(u8 battlerId)
  */
 void BtlController_EmitPrintString(u8 bufferId, u16 stringID)
 {
-	u8 i;
 	struct string_inf *Strings = (struct string_inf *)bbp_for_banks;
 
 	Strings->cmdID = 16;
@@ -72,9 +71,10 @@ void BtlController_EmitPrintString(u8 bufferId, u16 stringID)
 	Strings->b_stuff_hpbadscale = battle_stuff_ptr->curr_hp_bad_scale;
 	Strings->another_act = another_active_bank;
 	Strings->move_type = move_table[current_move].type;
-	for (i = 0; i < 4; i++)
+	
+	for (u8 i = 0; i < 4; i++)
         Strings->abilities[i] = gBankAbilities[i];
-    for (i = 0; i < 0x10; i++)
+    for (u8 i = 0; i < 0x10; i++)
     {
         Strings->buffs[0][i] = battle_text_buff1[i];
         Strings->buffs[1][i] = battle_text_buff2[i];
@@ -88,7 +88,6 @@ void BtlController_EmitPrintString(u8 bufferId, u16 stringID)
  */
 void BtlController_EmitPrintSelectionString(u8 bufferId, u16 stringID)
 {
-u8 i;
 	struct string_inf *Strings = (struct string_inf *)bbp_for_banks;
 
 	Strings->cmdID = 17;
@@ -100,9 +99,10 @@ u8 i;
 	Strings->last_ability = last_used_ability;
 	Strings->scr_active = battle_scripting.active_bank;
 	Strings->b_stuff_52 = battle_stuff_ptr->field_52;
-	for (i = 0; i < 4; i++)
+	
+	for (u8 i = 0; i < 4; i++)
         Strings->abilities[i] = gBankAbilities[i];
-    for (i = 0; i < 0x10; i++)
+    for (u8 i = 0; i < 0x10; i++)
     {
         Strings->buffs[0][i] = battle_text_buff1[i];
         Strings->buffs[1][i] = battle_text_buff2[i];

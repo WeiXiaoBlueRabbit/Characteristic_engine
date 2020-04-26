@@ -287,7 +287,7 @@ void reset_indicators_height(void) {
     }
 }
 
-void set_mega_attr(struct battle_participant* bank_struct, struct pokemon* poke_address, u16 new_species);
+void set_mega_attr(struct battle_participant* bank_struct, u8 bank, struct pokemon* poke_address, u16 new_species);
 struct pokemon* get_bank_poke_ptr(u8 bank);
 u8 get_first_to_strike(u8 bank1, u8 bank2, u8 ignore_priority);
 
@@ -353,7 +353,7 @@ u8 check_mega_evo(u8 bank) {
                 new_battlestruct->mega_related.party_mega_check |= BIT_GET(battle_team_id_by_side[bank]);
         }
 
-        set_mega_attr(attacker_struct, poke_address, mega_species);
+        set_mega_attr(attacker_struct, bank, poke_address, mega_species);
 
         //set buffer for new species and item used
         battle_text_buff1[0] = 0xFD;

@@ -50,7 +50,7 @@ void move_to_buff1(u16 move);
 bool try_stealing_bank_item(u8 thief_bank, u8 victim_bank);
 u8 check_field_for_ability(enum poke_abilities ability, u8 side_to_ignore, u8 mold);
 enum poke_abilities get_ally_ability(u8 bank, u8 mold);
-u16 findability_in_table(u16 ability, const u8* table);
+u16 findability_in_table(u16 ability, const u16* table);
 u8 get_battle_bank(u8 to_get);
 u8 check_if_move_failed(u8 bank);
 void prep_string(u16 strID, u8 bank);
@@ -3978,7 +3978,7 @@ void atk45_playanimation(void) //u8 bank, u8 animID, void halfword helper
 		info = read_hword(info_ptr);
 
 	//always play animation for certain things no matter whether battle scene is on or off
-	static const u8 always_play[] = {0, 2, 3, 0x11, 0x1E, 0x1F, 0x20, 0x21, 0xFF};
+	static const u16 always_play[] = {0, 2, 3, 0x11, 0x1E, 0x1F, 0x20, 0x21, 0xFF};
 	if (!(hitmarker & HITMARKER_NO_ANIMATIONS) || (findability_in_table(animID, always_play)))
 	{
 		active_bank = bank;

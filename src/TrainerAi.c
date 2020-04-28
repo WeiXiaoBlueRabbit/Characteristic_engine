@@ -110,7 +110,7 @@ u8 ai_get_ability(u8 bank, u8 gastro)
         ability = gBankAbilities[bank];
     else
     {
-        u16 recorded_ability = battle_resources->battle_history->ability[bank];
+        u16 recorded_ability = gBankAbilities[bank];
         u16 species = ai_get_species(bank);
         if (recorded_ability)
             ability = recorded_ability;

@@ -310,4 +310,12 @@ egg_moves 080703F0
 egg_moves 08070468
 ##correct_0x2ddf6A
 correct_0x2ddf6A 082DDF6A
-
+## Summary menu options
+sCursorOptions 081B32F8
+sCursorOptions 081B37C8
+sCursorOptions 081B37F8
+sCursorOptions 081B37F8
+## field moves
+sFieldMoves 081B348C
+sFieldMoveCursorCallbacks 081B54E0
+sFieldMoveCursorCallbacks 081B554C

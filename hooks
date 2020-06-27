@@ -82,3 +82,4 @@ RecordAbilityBattle 08131118 3
 ClearBattlerAbilityHistory 08131148 3
 BtlController_EmitPrintString 08033be4 3
 BtlController_EmitPrintSelectionString 08033cfc 3
+##CreateActionList 081B3414 0

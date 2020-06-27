@@ -571,7 +571,7 @@ void status_to_effect();
 bool move_effect2_setter(void)
 {
 	u8* move_effect = &battle_communication_struct.move_effect;
-	if (!MOVE_WORKED)
+	if (hitmarker & HITMARKER_IMMOBILE_DUE_TO_STATUS)
 	{
 		*move_effect = 0;
 		return 0;
@@ -703,7 +703,7 @@ bool move_effect2_setter(void)
 			break;
 		case 16: //knock off
 			if (!substitute && applier_bank->held_item && can_lose_item(bank, 1, 1) &&
-					battle_participants[bank_attacker].current_hp)
+					battle_participants[bank_attacker].current_hp  )
 			{
 				last_used_item = applier_bank->held_item;
 				applier_bank->held_item = 0;
@@ -1526,7 +1526,7 @@ u8 check_if_cannot_attack(void)
 			case 2: //check if frozen
 				if (attacker_struct->status.flags.freeze)
 				{
-					if (percent_chance(20))
+					if  ((percent_chance(20)) || find_move_in_table(current_move, user_thawing_moves))
 					{
 						effect = 2;
 						attacker_struct->status.flags.freeze = 0;
@@ -3420,7 +3420,7 @@ void atk02_attackstring(void)
 	if (!battle_execution_buffer)
 	{
 		u8 type = get_attacking_move_type();
-		if (check_ability(bank_attacker, ABILITY_PROTEAN) && current_move != MOVE_STRUGGLE && !move_outcome.failed &&
+		if ((check_ability(bank_attacker, ABILITY_PROTEAN)||check_ability(bank_attacker, ABILITY_LIBERO)) && current_move != MOVE_STRUGGLE && !move_outcome.failed &&
 				!new_battlestruct->various.protean_msg)
 		{
 			new_battlestruct->various.protean_msg = 1;

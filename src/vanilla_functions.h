@@ -254,8 +254,20 @@ u16 rng(void);
 
 u16 get_attributes(const struct pokemon* poke_address, u8 request, void* dst);
 void set_attributes(const struct pokemon* poke_address, u8 request, void* new_value);
+u32 GetMonData(struct pokemon *mon, s32 field);
 void set_callback2(void* ptr);
 u32 __umodsi3(u32, u32);
+void __attribute__((long_call)) PlaySE(u16 songNum);
+void __attribute__((long_call)) sub_81B302C(u8 *ptr);
+bool8 __attribute__((long_call)) sub_81221AC(void);
+void __attribute__((long_call)) sub_81B12C0(u8 taskId);
+void __attribute__((long_call)) sub_8161560(u8 taskId);
+bool32 __attribute__((long_call)) InUnionRoom(void);
+u8 __attribute__((long_call)) Menu_GetCursorPos(void);
+void __attribute__((long_call)) display_pokemon_menu_message(u32 stringID);
+void __attribute__((long_call)) AppendToList(u8* list, u8* pos, u8 newEntry);
+bool8 __attribute__((long_call)) InBattlePike(void);
+bool8 __attribute__((long_call)) ItemIsMail(u16 itemId);
 
 #ifdef __cplusplus
 }

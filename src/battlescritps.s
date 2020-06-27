@@ -179,7 +179,14 @@ BS_FERVENT_EVO:
 BS_LIGHT_UP:
 	callasm_cmd 88
 	printstring 0x188
-	goto_cmd BS_MEGA_EVO_STUFF
+	playanimation bank_attacker 0x26 0x0
+	waitstate
+	callasm_cmd 106
+	callasm_cmd 89
+	printstring 0x204
+	waitmessage 0x40
+	callasm_cmd 0
+	end3
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @ primal reversion

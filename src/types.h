@@ -15,6 +15,12 @@ typedef signed long s32;
 #define NULL 0
 
 typedef s32 bool;
+typedef float  f32;
+typedef double f64;
+
+typedef u8  bool8;
+typedef u16 bool16;
+typedef u32 bool32;
 
 typedef void (*command)(void);
 

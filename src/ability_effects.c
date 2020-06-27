@@ -409,6 +409,22 @@ u8 ability_battle_effects(u8 switch_id, u8 bank, u16 ability_to_check, u8 specia
                 case ABILITY_TRUANT:
                     disable_structs[bank].truant_counter ^= 0x80;
                     break;
+				case ABILITY_BALL_FETCH: //shupian
+				    if (get_item_pocket_id(var_800E_last_used_item) == POCKET_BALLS &&
+                        !battle_participants[bank].held_item &&
+                        !new_battlestruct->bank_affecting[bank_target].caught) {
+                            effect = true;
+                            bs_execute(BS_PICKUP);
+                            battle_participants[bank].held_item = var_800E_last_used_item;
+                            last_used_item = var_800E_last_used_item;
+                            active_bank = bank;
+                            bb2_setattributes_in_battle(0, 2, 0, 2, &battle_participants[bank].held_item);
+                            mark_buffer_bank_for_execution(bank);
+                            new_battlestruct->various.recently_used_item = 0;
+                            var_800E_last_used_item = 0;
+							//*var_800E_last_used_item = 0;							
+                    }
+                    break;					
                 case ABILITY_MOODY: {
                     u8 raiseable_stats = 0;
                     u8 lowerable_stats = 0;
@@ -1259,7 +1275,19 @@ u8 ability_battle_effects(u8 switch_id, u8 bank, u16 ability_to_check, u8 specia
 						}
 						break;
 					case ABILITY_COMATOSE: //JeremyZ
-						battle_participants[bank].status.flags.sleep = 1;
+						battle_participants[bank].status.flags.sleep = 1;	
+						break;						
+					case ABILITY_INTREPID_SWORD: //shupian	
+						battle_scripting.stat_changer = 0x11;
+				        effect = 1;
+                        bank_attacker = bank;
+                        bs_execute(BS_DOWNLOAD);
+						break;
+					case ABILITY_DAUNTLESS_SHIELD: //shupian	
+						battle_scripting.stat_changer = 0x12;
+				        effect = 1;
+                        bank_attacker = bank;
+                        bs_execute(BS_DOWNLOAD);					
                 }
                 if (common_effect) {
                     effect = true;
